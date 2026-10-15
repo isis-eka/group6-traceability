@@ -30,7 +30,7 @@ with only instance_id and problem_statement, and a rule that the criteria owner 
 [to fill - have yet to verify JSON schema] 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+Kept written. 
 
 ## 2026-10-15 · Automated AI use disclosure checks
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -43,8 +43,8 @@ Automate the SE201 AI use disclosure policy for team members who use coding agen
 ### How I checked it
 I tested the hook with an AI-trailer commit, read throught the logs and filled up the how i checked sections, realised that the agent is autofilling the how i checked AI output and adjusted the automated disclosure script to have it fill [ to fill] by default 
 
-### What I kept or changed
-[to fill by Isis Eka]
+### What I kept or changed 
+realised what i kept and changed should also be written by user and got claude to adjust the instuctions to agents verified the instructions exist in agents.md & claude/md : '- Never write "How I checked it": they are the member's own check and judgment. Leave both as `[to fill by <member name>]` (e.g. `[to fill by Isis Eka]`) and remind them to fill them in. `python tools/ai_disclosure.py summary` lists unfinished entries: any line starting with `[to fill` counts.' 
 
 ## 2026-10-15 · Leave "How I checked it" for members to write
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -55,24 +55,11 @@ I tested the hook with an AI-trailer commit, read throught the logs and filled u
 Agents should not write "How I checked it". Leave it as [to fill by <member name>] by default.
 
 ### How I checked it
-[to fill by Isis Eka]
+tested another agent commit and verified in the disclosure log 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept agent's changes 
 
-## 2026-10-15 · Sync AGENTS.md with CLAUDE.md placeholder rule
-- **Tool (model):** Claude Code (Claude Opus 5.5)
-- **Files:** AGENTS.md
-- **Outcome:** Kept
-
-### What I asked for
-Commit my latest edits. Claude copied my new CLAUDE.md line about the summary command into AGENTS.md so both guides match.
-
-### How I checked it
-[to fill by Isis Eka]
-
-### What I kept or changed
-[to fill by Isis Eka]
 
 ## 2026-10-15 · Leave "What I kept or changed" for members to write
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -83,7 +70,7 @@ Commit my latest edits. Claude copied my new CLAUDE.md line about the summary co
 "What I kept or changed" should also be written by the member. Agents leave it as [to fill by <member name>], and the summary flags it.
 
 ### How I checked it
-[to fill by Isis Eka]
+Verified in agents.md and claude.md 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes 
