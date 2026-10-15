@@ -42,7 +42,7 @@ since the criteria owner must not see tests.
 Automate the SE201 AI use disclosure policy for team members who use coding agents: commit trailers, per-member ai-log files, and checks that catch missing entries.
 
 ### How I checked it
-I tested the hook with an AI-trailer commit, read throught the logs and filled up the how i checked sections, realised that the agent is autofilling the how i checked segments and adjusted the automated disclosure script to have it fill [ to fill] by default 
+I tested the hook with an AI-trailer commit, read throught the logs and filled up the how i checked sections, realised that the agent is autofilling the how i checked AI output and adjusted the automated disclosure script to have it fill [ to fill] by default 
 
 ### What I kept or changed
 Kept as written. 
@@ -60,3 +60,17 @@ Agents should not write "How I checked it". Leave it as [to fill by <member name
 
 ### What I kept or changed
 Kept as written. The summary command now lists entries still to fill.
+
+## 2026-10-15 · Sync AGENTS.md with CLAUDE.md placeholder rule
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+Commit my latest edits. Claude copied my new CLAUDE.md line about the summary command into AGENTS.md so both guides match.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+Kept as written.

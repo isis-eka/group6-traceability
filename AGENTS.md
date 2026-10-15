@@ -15,7 +15,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 ## AI use disclosure (SE201 policy, required on every commit with AI-assisted work)
 - Add the trailer `Assisted-by: <tool> (<model>)` (e.g. `Assisted-by: Codex (gpt-6-luna)`). Your own `Co-Authored-By:` line also counts.
 - In the **same commit**, append an entry to `ai-log/<member>.md` for the person you work for (e.g. `ai-log/isis-eka.md`). If there's no file, copy `ai-log/your-name.md`; ask their name if unsure. Use one entry per task in the template's format. Outcome is `Kept`, `Changed` or `Rejected`.
-- Never write "How I checked it" yourself: it is the member's own check. Leave it as `[to fill by <member name>]` (e.g. `[to fill by Isis Eka]`) and remind them to fill it in.
+- Never write "How I checked it" yourself: it is the member's own check. Leave it as `[to fill by <member name>]` (e.g. `[to fill by Isis Eka]`) and remind them to fill it in. `python tools/ai_disclosure.py summary` lists unfinished entries: any line starting with `[to fill` counts.
 - `.githooks/commit-msg` blocks AI commits without a log entry. If `git config core.hooksPath` is not `.githooks`, set it.
 
 ## Folder layout
