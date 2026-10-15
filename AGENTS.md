@@ -12,6 +12,12 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 - Default model: **`gpt-6-luna`** (override with `OPENAI_MODEL` in `.env`). `gpt-6.1-sol` is for the one final run only. Never GPT-4o.
 - Agent limits: **max 10 tool calls** per case, **read-only tools only** (`search_tests`, `grep`, `read_file`; no writes, no MCP, no coverage tracing), **max ~200 lines per file read**.
 
+## AI use disclosure (SE201 policy, required on every commit with AI-assisted work)
+- Add the trailer `Assisted-by: <tool> (<model>)` (e.g. `Assisted-by: Codex (gpt-6-luna)`). Your own `Co-Authored-By:` line also counts.
+- In the **same commit**, append an entry to `ai-log/<member>.md` for the person you work for (e.g. `ai-log/isis-eka.md`). If there's no file, copy `ai-log/your-name.md`; ask their name if unsure. Use one entry per task in the template's format. Outcome is `Kept`, `Changed` or `Rejected`.
+- "How I checked it" must be true. Write only what was actually run or reviewed, and ask the user what they checked. Never invent verification.
+- `.githooks/commit-msg` blocks AI commits without a log entry. If `git config core.hooksPath` is not `.githooks`, set it.
+
 ## Folder layout
 | Path | Contents |
 |---|---|
@@ -21,6 +27,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 | `results/` | `results.jsonl`, score tables, charts |
 | `workspace/` | Cloned requests/flask per case. Git-ignored, rebuilt by scripts |
 | `docs/` | `decisions.md` (design decisions and why) |
+| `ai-log/` | AI use log per member; `tools/ai_disclosure.py` checks them |
 
 ## Running
 ```bash

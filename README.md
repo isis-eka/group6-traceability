@@ -13,6 +13,7 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 | `src/` | Python scripts | Gabriel, Isis Eka |
 | `results/` | `results.jsonl`, score tables, charts | Xiaoning |
 | `workspace/` | Downloaded copies of requests/flask. **Not uploaded to GitHub** | (created by scripts) |
+| `ai-log/` | One AI use log per member (`isis-eka.md`, ...). Start from `your-name.md` | Everyone |
 
 ## One-time setup
 
@@ -23,6 +24,10 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
    ```
 3. Copy `.env.example` to a new file called `.env` and paste the OpenAI API key into it.
    **Never upload `.env` to GitHub.** It is already listed in `.gitignore`.
+4. Turn on the AI disclosure check (Claude Code does this for you automatically):
+   ```bash
+   git config core.hooksPath .githooks
+   ```
 
 ## Scripts
 
@@ -41,3 +46,13 @@ More scripts (search index, version 1, scoring) will be added in `src/`.
 - Draft acceptance criteria from the issue text only. Never look at the tests or the fix while writing or reviewing them.
 - `labels.jsonl` (the answer key) is never sent to the AI.
 - Commit small and often, with a clear message (e.g. "add verdict prompt v2").
+
+## AI use disclosure (SE201 policy)
+
+Any commit with AI-assisted work (code, tests, docs, prompts, data) needs both:
+
+1. A trailer line in the commit message: `Assisted-by: <tool> (<model>)`, e.g. `Assisted-by: ChatGPT (GPT-5)`. A tool's own `Co-Authored-By:` line also counts.
+2. An entry in `ai-log/<your-name>.md`, committed with the same work. Copy `ai-log/your-name.md` to start. The key part is **How I checked it**.
+
+The git hook blocks commits that have the trailer but no log entry, and GitHub Actions re-checks every push.
+`python tools/ai_disclosure.py check-logs` checks your log's format. `python tools/ai_disclosure.py summary` lists the tools used, for the team declaration.

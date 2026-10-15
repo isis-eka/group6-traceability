@@ -1,0 +1,26 @@
+# Re-checks the SE201 AI use disclosure for everyone, including clones without the git hook.
+name: AI use disclosure
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate ai-log files
+        run: python tools/ai_disclosure.py check-logs
+      - name: Every AI-assisted commit has an ai-log entry
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python tools/ai_disclosure.py check-range "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}"
+          else
+            python tools/ai_disclosure.py check-range "${{ github.event.before }}" "${{ github.sha }}"
+          fi
