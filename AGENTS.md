@@ -8,8 +8,8 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 - **Never read `data/labels.jsonl` or send it (or anything derived from it) to the model.** It is the answer key; only scoring code may open it.
 - **Acceptance criteria are drafted from issue text only** (`problem_statement`). Never use tests, `test_patch`, `patch`, `FAIL_TO_PASS` or issue comments when drafting or reviewing them.
 - **Never commit `.env`.** Keys live only in `.env` (copied from `.env.example`).
-- Default model: **`gpt-6-luna`** (override with `OPENAI_MODEL` in `.env`).
-- Agent limits: **max 10 tool calls** per case, **read-only tools only** (no writes, no shell that changes files), **max ~200 lines per file read**.
+- Default model: **`gpt-6-luna`** (override with `OPENAI_MODEL` in `.env`). `gpt-6.1-sol` is for the one final run only. Never GPT-4o.
+- Agent limits: **max 10 tool calls** per case, **read-only tools only** (`search_tests`, `grep`, `read_file`; no writes, no MCP, no coverage tracing), **max ~200 lines per file read**.
 
 ## Folder layout
 | Path | Contents |

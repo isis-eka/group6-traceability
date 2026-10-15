@@ -1,0 +1,34 @@
+# Decisions
+
+Design decisions for the project and why we made them. Add new ones at the bottom; if one
+changes, edit it and say what replaced it rather than deleting it.
+
+## 1. SWE-bench only (requests + flask), no demo repo
+We evaluate only on real SWE-bench issues from `psf/requests` and `pallets/flask`. Each issue
+comes with a real fix and real tests, which gives us ground truth for free; a hand-made demo
+repo would be easy to bias toward our own tool and would not be credible as evidence.
+
+## 2. Three versions compared against the same answer key
+We build three versions of the tool and score all of them against one shared `labels.jsonl`.
+Using a single fixed answer key means differences in scores come from the versions
+themselves, not from changes in labelling.
+
+## 3. Agent uses 3 generic tools: `search_tests`, `grep`, `read_file`
+The agent gets the same kind of tools a developer would use, not tools written for these
+repos. Custom tools could encode knowledge of the answer and would not carry over to other
+projects; generic tools keep the result about the model's reasoning, not our tooling.
+
+## 4. No MCP, no coverage tracing
+Tools are plain Python functions called directly, and we do not run tests to collect coverage.
+This keeps setup small and reproducible for the whole team, and coverage only shows code was
+*executed*, not that the requirement's expected result was *checked*, which is what we judge.
+
+## 5. gpt-6-luna for development, one final run on gpt-6.1-sol, no GPT-4o
+All development and tuning runs use `gpt-6-luna` to keep cost and time low. The reported
+results come from a single final run on `gpt-6.1-sol`, so we don't tune prompts on the
+final model; GPT-4o is excluded because it is outdated next to these models.
+
+## 6. Acceptance criteria are AI-drafted from issue text only, then human-reviewed
+`prompts/draft_criteria.txt` drafts criteria from the issue's `problem_statement`, and a team
+member reviews each one. Using issue text only stops tests or the fix from leaking into the
+criteria (which would make "covered" trivially true); human review catches vague or wrong drafts.
