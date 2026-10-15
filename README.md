@@ -8,9 +8,9 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 
 | Folder | What goes here | Who mainly works here |
 |---|---|---|
-| `prompts/` | Instructions we send to the AI (plain text) | Isis Eka |
-| `data/` | `issues.jsonl` (SWE-bench issues), `cases.jsonl`, `labels.jsonl` | Sammi, Xiaoning |
-| `src/` | Python scripts | Gabriel, Sammi |
+| `prompts/` | Instructions we send to the AI (plain text) | Sammi |
+| `data/` | `issues.jsonl` (SWE-bench issues), `issue_text.jsonl` (issue text only), `cases.jsonl`, `labels.jsonl` | Isis Eka, Xiaoning |
+| `src/` | Python scripts | Gabriel, Isis Eka |
 | `results/` | `results.jsonl`, score tables, charts | Xiaoning |
 | `workspace/` | Downloaded copies of requests/flask. **Not uploaded to GitHub** | (created by scripts) |
 
@@ -30,6 +30,7 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 |---|---|---|
 | 1 | `python src/load_swebench.py` | Downloads SWE-bench and saves the requests + flask issues to `data/issues.jsonl` |
 | 2 | `python src/prepare_repo.py <instance_id>` | Builds the **covered** and **not covered** versions of the code for one issue in `workspace/` |
+| 3 | `python src/export_issue_text.py` | Writes `data/issue_text.jsonl` with only `instance_id` and `problem_statement`. This is the only file the acceptance criteria owner works from |
 
 Example: `python src/prepare_repo.py psf__requests-2317`
 
