@@ -34,7 +34,8 @@ FIELDS = {
 }
 SECTIONS = ["What I asked for", "How I checked it", "What I kept or changed"]
 # Agents leave "How I checked it" as "[to fill by <name>]"; the member writes it.
-PLACEHOLDER = re.compile(r"^\[to fill by [^\]]+\]\s*$", re.M)
+# Any line starting with "[to fill" counts as unfinished, e.g. "[to fill - check schema]".
+PLACEHOLDER = re.compile(r"^\s*\[\s*to fill", re.M | re.I)
 
 
 def git(*args):

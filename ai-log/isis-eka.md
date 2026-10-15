@@ -11,11 +11,11 @@ folder layout, how to run scripts, JSONL schemas, hard rules) and docs/decisions
 list of six decisions, with the reason for each.
 
 ### How I checked it
-[to fill by Isis Eka]
+I compared the Agents/claude & readme file contents with our revised proposal document that i generated with claude regarding the project's design and architecture 
+for architectural design i reviewed the decisions.md and ensured it aligned with our team's goals 
 
 ### What I kept or changed
-Kept the guides and decisions. Added the final-run model (gpt-6.1-sol), no GPT-4o, and the
-three agent tools to the hard rules. Schemas still to be aligned with the proposal doc.
+Kept the guides and decisions and suggested file structure. verified that we'll be using gpt 6 models & noted that gpt 4o will be discontinued soon by openai 
 
 ## 2026-10-15 · Role swap and issue-text-only export
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -27,7 +27,7 @@ Update folder owners after the role swap, add a script that writes data/issue_te
 with only instance_id and problem_statement, and a rule that the criteria owner works only from that file.
 
 ### How I checked it
-[to fill by Isis Eka]
+[to fill - have yet to verify JSON schema] 
 
 ### What I kept or changed
 Kept as written. Claude also changed the labels.jsonl example labeler from Sammi to Xiaoning,
@@ -39,14 +39,13 @@ since the criteria owner must not see tests.
 - **Outcome:** Kept
 
 ### What I asked for
-Automate the SE201 AI use disclosure policy for team members who use coding agents: commit
-trailers, per-member ai-log files, and checks that catch missing entries.
+Automate the SE201 AI use disclosure policy for team members who use coding agents: commit trailers, per-member ai-log files, and checks that catch missing entries.
 
 ### How I checked it
-[to fill by Isis Eka]
+I tested the hook with an AI-trailer commit, read throught the logs and filled up the how i checked sections, realised that the agent is autofilling the how i checked segments and adjusted the automated disclosure script to have it fill [ to fill] by default 
 
 ### What I kept or changed
-Kept as written.
+Kept as written. 
 
 ## 2026-10-15 · Leave "How I checked it" for members to write
 - **Tool (model):** Claude Code (Claude Opus 5.5)
