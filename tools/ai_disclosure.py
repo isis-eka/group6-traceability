@@ -33,7 +33,8 @@ FIELDS = {
     "Outcome": re.compile(r"^- \*\*Outcome:\*\* (Kept|Changed|Rejected)\s*$"),
 }
 SECTIONS = ["What I asked for", "How I checked it", "What I kept or changed"]
-# Agents leave "How I checked it" as "[to fill by <name>]"; the member writes it.
+# Agents leave "How I checked it" and "What I kept or changed" as "[to fill by <name>]";
+# the member writes them.
 # Any line starting with "[to fill" counts as unfinished, e.g. "[to fill - check schema]".
 PLACEHOLDER = re.compile(r"^\s*\[\s*to fill", re.M | re.I)
 
@@ -144,10 +145,10 @@ def cmd_summary():
         for tool, n in tools.most_common():
             print(f"  {n} x {tool}")
         print("  outcomes: " + ", ".join(f"{k} {v}" for k, v in outcomes.items()))
-        todo = [h for h, body in re.findall(r"^## ([^\n]+)\n(.*?)(?=^## |\Z)", text, re.M | re.S)
-                if PLACEHOLDER.search(body)]
-        for heading in todo:
-            print(f"  TO FILL 'How I checked it': {heading}")
+        for heading, body in re.findall(r"^## ([^\n]+)\n(.*?)(?=^## |\Z)", text, re.M | re.S):
+            for section, content in re.findall(r"^### ([^\n]+)\n(.*?)(?=^#|\Z)", body, re.M | re.S):
+                if PLACEHOLDER.search(content):
+                    print(f"  TO FILL '{section}': {heading}")
     return []
 
 

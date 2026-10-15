@@ -30,8 +30,7 @@ with only instance_id and problem_statement, and a rule that the criteria owner 
 [to fill - have yet to verify JSON schema] 
 
 ### What I kept or changed
-Kept as written. Claude also changed the labels.jsonl example labeler from Sammi to Xiaoning,
-since the criteria owner must not see tests.
+[to fill by Isis Eka]
 
 ## 2026-10-15 · Automated AI use disclosure checks
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -45,7 +44,7 @@ Automate the SE201 AI use disclosure policy for team members who use coding agen
 I tested the hook with an AI-trailer commit, read throught the logs and filled up the how i checked sections, realised that the agent is autofilling the how i checked AI output and adjusted the automated disclosure script to have it fill [ to fill] by default 
 
 ### What I kept or changed
-Kept as written. 
+[to fill by Isis Eka]
 
 ## 2026-10-15 · Leave "How I checked it" for members to write
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -59,7 +58,7 @@ Agents should not write "How I checked it". Leave it as [to fill by <member name
 [to fill by Isis Eka]
 
 ### What I kept or changed
-Kept as written. The summary command now lists entries still to fill.
+[to fill by Isis Eka]
 
 ## 2026-10-15 · Sync AGENTS.md with CLAUDE.md placeholder rule
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -73,4 +72,18 @@ Commit my latest edits. Claude copied my new CLAUDE.md line about the summary co
 [to fill by Isis Eka]
 
 ### What I kept or changed
-Kept as written.
+[to fill by Isis Eka]
+
+## 2026-10-15 · Leave "What I kept or changed" for members to write
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** ai-log/isis-eka.md, ai-log/your-name.md, AGENTS.md, CLAUDE.md, README.md, tools/ai_disclosure.py
+- **Outcome:** Kept
+
+### What I asked for
+"What I kept or changed" should also be written by the member. Agents leave it as [to fill by <member name>], and the summary flags it.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
