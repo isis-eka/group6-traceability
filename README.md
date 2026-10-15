@@ -52,7 +52,7 @@ More scripts (search index, version 1, scoring) will be added in `src/`.
 Any commit with AI-assisted work (code, tests, docs, prompts, data) needs both:
 
 1. A trailer line in the commit message: `Assisted-by: <tool> (<model>)`, e.g. `Assisted-by: ChatGPT (GPT-5)`. A tool's own `Co-Authored-By:` line also counts.
-2. An entry in `ai-log/<your-name>.md`, committed with the same work. Copy `ai-log/your-name.md` to start. The key part is **How I checked it**.
+2. An entry in `ai-log/<your-name>.md`, committed with the same work. Copy `ai-log/your-name.md` to start. The key part is **How I checked it**: agents leave it as `[to fill by <name>]`, and you write it yourself. `python tools/ai_disclosure.py summary` lists entries still to fill.
 
 The git hook blocks commits that have the trailer but no log entry, and GitHub Actions re-checks every push.
 `python tools/ai_disclosure.py check-logs` checks your log's format. `python tools/ai_disclosure.py summary` lists the tools used, for the team declaration.

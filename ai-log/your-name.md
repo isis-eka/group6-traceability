@@ -7,6 +7,7 @@ Starter file. Copy it to ai-log/<first-last>.md (e.g. isis-eka.md) and replace t
   `Assisted-by: <tool> (<model>)` trailer (a tool's own Co-Authored-By line also counts).
 - Outcome is Kept, Changed or Rejected. Rejected entries can be committed with no code.
 - "How I checked it" matters most: say what you ran or reviewed, and what you found.
+  Write it yourself. Agents leave it as [to fill by <your name>] for you to replace.
 Check your file with: python tools/ai_disclosure.py check-logs
 -->
 

@@ -11,10 +11,7 @@ folder layout, how to run scripts, JSONL schemas, hard rules) and docs/decisions
 list of six decisions, with the reason for each.
 
 ### How I checked it
-Claude scanned the files for API keys before the first push and found none. Comparing the
-guides with our proposal doc showed the JSONL schemas Claude proposed do not match the doc's
-"Shared files" section, and the partial variant is missing. The decision reasons were
-drafted by Claude and still need team review.
+[to fill by Isis Eka]
 
 ### What I kept or changed
 Kept the guides and decisions. Added the final-run model (gpt-6.1-sol), no GPT-4o, and the
@@ -27,12 +24,10 @@ three agent tools to the hard rules. Schemas still to be aligned with the propos
 
 ### What I asked for
 Update folder owners after the role swap, add a script that writes data/issue_text.jsonl
-with only instance_id and problem_statement, and a rule that the criteria owner works only
-from that file.
+with only instance_id and problem_statement, and a rule that the criteria owner works only from that file.
 
 ### How I checked it
-Claude ran the script on a sample issue containing patch, test_patch and FAIL_TO_PASS; the
-output had only instance_id and problem_statement. Not yet run on the real issues.jsonl.
+[to fill by Isis Eka]
 
 ### What I kept or changed
 Kept as written. Claude also changed the labels.jsonl example labeler from Sammi to Xiaoning,
@@ -48,9 +43,21 @@ Automate the SE201 AI use disclosure policy for team members who use coding agen
 trailers, per-member ai-log files, and checks that catch missing entries.
 
 ### How I checked it
-Claude tested the hook with an AI-trailer commit and no log (blocked), a bad Assisted-by
-trailer (blocked), a malformed log entry (blocked) and a correct commit (accepted), and ran
-check-logs and check-range on this repo.
+[to fill by Isis Eka]
 
 ### What I kept or changed
 Kept as written.
+
+## 2026-10-15 · Leave "How I checked it" for members to write
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** ai-log/isis-eka.md, ai-log/your-name.md, AGENTS.md, CLAUDE.md, README.md, tools/ai_disclosure.py
+- **Outcome:** Kept
+
+### What I asked for
+Agents should not write "How I checked it". Leave it as [to fill by <member name>] by default.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+Kept as written. The summary command now lists entries still to fill.
