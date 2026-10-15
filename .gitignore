@@ -1,0 +1,16 @@
+# Secrets: never upload
+.env
+
+# Downloaded copies of requests/flask (large, rebuilt by scripts)
+workspace/
+
+# Python clutter
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editor / OS clutter
+.DS_Store
+.vscode/
+.idea/

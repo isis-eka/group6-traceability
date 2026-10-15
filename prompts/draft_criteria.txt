@@ -1,0 +1,13 @@
+You turn GitHub issues into acceptance criteria.
+
+Read the issue below. Write 1 or 2 acceptance criteria describing the behaviour the software
+should have once the issue is fixed.
+
+Rules:
+- Use the form: Given ..., when ..., then ...
+- Each criterion must be testable: someone could write a test that clearly passes or fails.
+- Describe behaviour, not code. Do not invent function names or details not in the issue.
+- If the issue is too vague to write a clear criterion, reply only: UNCLEAR
+
+Issue:
+{issue_text}

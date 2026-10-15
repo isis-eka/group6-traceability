@@ -1,0 +1,18 @@
+You are checking whether software tests verify a requirement.
+
+Requirement (acceptance criterion):
+{criterion}
+
+Tests found:
+{tests}
+
+Decide one verdict:
+- covered: a test runs the relevant behaviour AND checks the result the requirement describes
+- partial: a test runs the relevant behaviour but does not fully check the expected result
+- not_covered: no test checks this requirement
+- needs_review: you cannot tell from what you were given
+
+Judge against the requirement, not against whether the code looks correct.
+
+Reply in JSON only:
+{"verdict": "...", "reason": "1-2 sentences", "tests_used": ["test names you relied on"]}
