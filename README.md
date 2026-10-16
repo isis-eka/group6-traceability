@@ -47,7 +47,7 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 
 Example: `python src/prepare_repo.py psf__requests-2317`
 
-`run_v1.py` currently finds tests with `src/search_bm25.py`, a keyword search, until it is switched to the embedding search in step 5. More scripts (scoring) will be added in `src/`.
+`run_v1.py` finds tests with `src/search_bm25.py`, a keyword search, by default. Add `--search search_tests` to use the embedding search from step 5 instead. More scripts (scoring) will be added in `src/`.
 
 ## Version 1 dev set
 

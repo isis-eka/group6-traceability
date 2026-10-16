@@ -46,8 +46,8 @@ python src/run_v1.py --ollama                   # same, on local Ollama qwen3:8b
 `covered` = base commit + code fix + its tests; `not_covered` = base commit + code fix only.
 Scripts are run from the repo root. `run_v1.py` searches with `src/search_bm25.py` (keyword search over
 test functions, later the BM25 baseline) by default; `--search <module>` picks any module in `src/` with
-`search_tests(workspace, criterion, k=3)`. The embedding search `src/search_tests.py` takes
-`(instance_id, variant, query, k)` instead, so it does not plug into `run_v1.py` yet.
+`search_tests(workspace, criterion, k=3)`. The embedding search `src/search_tests.py` has the same
+interface: `run_v1.py --search search_tests` (needs the index from `build_index.py`).
 Scoring scripts are still to be added in `src/`.
 
 ## JSONL schemas (one JSON object per line)
