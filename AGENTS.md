@@ -23,10 +23,10 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 |---|---|
 | `prompts/` | Plain-text prompts: `draft_criteria.txt`, `verdict_v1.txt` (bump version for changes) |
 | `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json` (issue ids and split only), `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key; git-ignored, shared privately), `index_v1/` (embedded test-function chunks, git-ignored, rebuilt by `build_index.py`) |
-| `src/` | Python scripts |
+| `src/` | Python scripts; `src/evaluation/` holds the scoring scripts (`sanity_check_labels.py`, `evaluate.py`, `plot_metrics.py`; first drafts, still under review). Only scoring code may open the label files |
 | `results/` | `results.jsonl`, score tables, charts |
 | `workspace/` | Cloned requests/flask per case. Git-ignored, rebuilt by scripts |
-| `docs/` | `decisions.md` (design decisions and why) |
+| `docs/` | `decisions.md` (design decisions and why), `architecture.md` (Mermaid diagrams: pipeline and data model) |
 | `ai-log/` | AI use log per member; `tools/ai_disclosure.py` checks them |
 
 ## Running
@@ -49,7 +49,8 @@ and the OpenAI model from `.env`. Fallbacks, each printed as a NOTE: no OpenAI k
 keyword search (`src/search_bm25.py`, later the BM25 baseline); no OpenAI key -> local Ollama
 (`qwen3:8b`). `--search search_bm25` and `--ollama [MODEL]` choose them explicitly. Each result row
 records the search and model actually used; only OpenAI + embedding-search rows are reportable.
-Scoring scripts are still to be added in `src/`.
+Scoring scripts live in `src/evaluation/` (first drafts; run them from the repo root like the other scripts; they need `pandas` + `matplotlib`, now in `requirements.txt`):
+`sanity_check_labels.py` validates the answer key, `evaluate.py` compares `results/results.jsonl` with the labels and writes `results/evaluation_summary.csv` + `results/aggregated_metrics.csv`, `plot_metrics.py` draws charts from the aggregate CSV into `results/`.
 
 ## JSONL schemas (one JSON object per line)
 These schemas are proposed: agree on them as a team before relying on them, and update this file when they change.
