@@ -5,7 +5,7 @@ tested: `covered`, `partial`, `not_covered` or `needs_review`. Evaluated on SWE-
 from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 
 ## Hard rules
-- **Never read `data/labels.jsonl` or send it (or anything derived from it) to the model.** It is the answer key; only scoring code may open it.
+- **Never read `data/labels.jsonl` or `data/labels_v1.jsonl` or send them (or anything derived from them) to the model.** They are the answer key; only scoring code may open them.
 - **Acceptance criteria are drafted from issue text only** (`problem_statement`). Never use tests, `test_patch`, `patch`, `FAIL_TO_PASS` or issue comments when drafting or reviewing them.
 - **The acceptance criteria owner works only from `data/issue_text.jsonl`.** Never show them, or include in criteria-drafting prompts, any patch, test_patch, FAIL_TO_PASS or test file.
 - **Never commit `.env`.** Keys live only in `.env` (copied from `.env.example`).
@@ -22,7 +22,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 | Path | Contents |
 |---|---|
 | `prompts/` | Plain-text prompts: `draft_criteria.txt`, `verdict_v1.txt` (bump version for changes) |
-| `data/` | `issues.jsonl`, `issue_text.jsonl` (criteria drafting input), `cases.jsonl`, `labels.jsonl` |
+| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json`, `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key) |
 | `src/` | Python scripts |
 | `results/` | `results.jsonl`, score tables, charts |
 | `workspace/` | Cloned requests/flask per case. Git-ignored, rebuilt by scripts |

@@ -88,3 +88,31 @@ Record the 7 chosen issues and their right-answer tests, check them against FAIL
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-16 · Expand dev set to 10 issues and use full test ids
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** data/chosen_issues.json, data/issue_text_v1.jsonl, data/labels_v1.jsonl, README.md
+- **Outcome:** Kept
+
+### What I asked for
+Add psf__requests-4106, psf__requests-5087 and pallets__flask-5014 to the dev set, mark all issues as split "dev", prepare and check their repos, regenerate the issue text, add their labels, and convert every test name to the full pytest id from FAIL_TO_PASS. Note in the README how parametrized tests are matched.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
+
+## 2026-10-16 · Make AGENTS.md the single instructions file
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** AGENTS.md, CLAUDE.md
+- **Outcome:** Kept
+
+### What I asked for
+Update the version 1 description to 10 dev issues (9 requests, 1 flask). Move all instructions into AGENTS.md and make CLAUDE.md a single line, @AGENTS.md, so there is only one file to keep updated.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

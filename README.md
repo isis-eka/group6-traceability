@@ -41,6 +41,16 @@ Example: `python src/prepare_repo.py psf__requests-2317`
 
 More scripts (search index, version 1, scoring) will be added in `src/`.
 
+## Test IDs
+
+Every file names a test the same way, as a pytest id copied exactly from SWE-bench's `FAIL_TO_PASS`: `file::Class::test_name`, or `file::test_name` for a test outside a class. Examples:
+- `tests/test_requests.py::TestRequests::test_binary_put`
+- `tests/test_packages.py::test_can_access_idna_attribute`
+
+`data/chosen_issues.json`, `data/labels_v1.jsonl`, the search index and `results.jsonl` all use this format, so labels and search results can be compared directly.
+
+**Parametrized tests** keep their `[...]` part in the labels, e.g. `tests/test_requests.py::TestRequests::test_invalid_url[InvalidURL-http://.example.com]`. Search and scoring match at the **function level** and ignore the `[...]` part, because one search chunk is the whole test function, with all its inputs.
+
 ## Rules
 
 - Draft acceptance criteria from the issue text only. Never look at the tests or the fix while writing or reviewing them.
