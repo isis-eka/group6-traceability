@@ -144,3 +144,17 @@ Keep only instance_id and split in data/chosen_issues.json, so the right-answer 
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-16 · Build the test search index for version 1
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/build_index.py, src/search_tests.py, README.md, AGENTS.md, docs/decisions.md, .gitignore
+- **Outcome:** Kept
+
+### What I asked for
+Write build_index.py (one chunk per test function via ast, decorators included, test_id in the README format, embedded locally with text-embedding-3-small, cached by text hash, --dry-run and --only) and search_tests.py (top-k cosine search, command-line use). Dry-run all 10 issues and check the right-answer tests appear only in covered. Document both scripts and add decision 7. Then remove line numbers from the chunk header text so identical tests share one embedding.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

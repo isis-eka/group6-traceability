@@ -36,10 +36,12 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 | 1 | `python src/load_swebench.py` | Downloads SWE-bench and saves the requests + flask issues to `data/issues.jsonl` |
 | 2 | `python src/prepare_repo.py <instance_id>` | Builds the **covered** and **not covered** versions of the code for one issue in `workspace/` |
 | 3 | `python src/export_issue_text.py` | Writes `data/issue_text.jsonl` with only `instance_id` and `problem_statement`. This is the only file the acceptance criteria owner works from |
+| 4 | `python src/build_index.py` | Splits each covered/not_covered copy's test files into one chunk per test function and embeds them into `data/index_v1/`. Run `--dry-run` first: it only writes the chunks to `workspace/_chunks/`, free. `--only <instance_id>` does one issue |
+| 5 | `python src/search_tests.py <instance_id> <covered\|not_covered> "<query>"` | Prints the 3 test functions most similar to the query, with scores |
 
 Example: `python src/prepare_repo.py psf__requests-2317`
 
-More scripts (search index, version 1, scoring) will be added in `src/`.
+More scripts (version 1, scoring) will be added in `src/`.
 
 ## Test IDs
 
