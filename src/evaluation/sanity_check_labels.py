@@ -12,7 +12,7 @@ def load_jsonl(path):
             line = line.strip()
             if not line:
                 continue
-        recs.append(json.loads(line))
+            recs.append(json.loads(line))
     return recs
 
 # validation for ground truth labels
