@@ -12,10 +12,10 @@ Starter file. Copy it to ai-log/<first-last>.md (e.g. isis-eka.md) and replace t
 Check your file with: python tools/ai_disclosure.py check-logs
 -->
 
-## 2026-10-12 · Retrieval pipeline skeleton
-- **Tool (model):** Claude Code (Claude Sonnet 4.5)
-- **Files:** src/retrieval/pipeline.py, tests/test_chunking.py
-- **Outcome:** Changed
+## 2026-10-16 · Checking the Asnwer Key
+- **Tool (model):** Doubao (2.31.4_win)
+- **Files:** 
+- **Outcome:** 
 
 ### What I asked for
 A skeleton for the retrieval pipeline: document loading, chunking, embedding and a top-k
