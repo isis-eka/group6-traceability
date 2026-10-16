@@ -14,8 +14,8 @@ Check your file with: python tools/ai_disclosure.py check-logs
 
 ## 2026-10-16 · Checking the Asnwer Key
 - **Tool (model):** Doubao (2.31.4_win)
-- **Files:** 
-- **Outcome:** 
+- **Files:** ()
+- **Outcome:** ()
 
 ### What I asked for
 A skeleton for the retrieval pipeline: document loading, chunking, embedding and a top-k
