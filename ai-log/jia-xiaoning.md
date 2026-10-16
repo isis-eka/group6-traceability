@@ -14,17 +14,14 @@ Check your file with: python tools/ai_disclosure.py check-logs
 
 ## 2026-10-16 · Checking the Asnwer Key
 - **Tool (model):** Doubao (2.31.4_win)
-- **Files:** ()
-- **Outcome:** ()
+- **Files:** data/labels_v1.jsonl, task outline, raw code for evaluation
+- **Outcome:** suggested to add in src/evaluation/sanity_check_labels.py
 
 ### What I asked for
-A skeleton for the retrieval pipeline: document loading, chunking, embedding and a top-k
-query function.
+I asked it to check if there was anything missing to ensure that the model will work well after passing in the results and ground truth. 
 
 ### How I checked it
-Ran the unit tests, which passed. Reviewing the chunking logic by hand showed that the
-overlap was measured in characters rather than tokens, so chunks near the limit were cut short.
+Using another coding software, after uploading the folders in, I deliberately put some errors into data/labels_v1.jsonl. 
 
 ### What I kept or changed
-Kept the structure and the loader. Rewrote the chunk-overlap handling to count tokens and
-added a test for chunks at the size limit.
+Kept the main structure of my code for the evaluation, but added in the src/evaluation/sanity_check_labels.py just to be extra safe. 
