@@ -47,7 +47,7 @@ Every file names a test the same way, as a pytest id copied exactly from SWE-ben
 - `tests/test_requests.py::TestRequests::test_binary_put`
 - `tests/test_packages.py::test_can_access_idna_attribute`
 
-`data/chosen_issues.json`, `data/labels_v1.jsonl`, the search index and `results.jsonl` all use this format, so labels and search results can be compared directly.
+`data/labels_v1.jsonl`, the search index and `results.jsonl` all use this format, so labels and search results can be compared directly.
 
 **Parametrized tests** keep their `[...]` part in the labels, e.g. `tests/test_requests.py::TestRequests::test_invalid_url[InvalidURL-http://.example.com]`. Search and scoring match at the **function level** and ignore the `[...]` part, because one search chunk is the whole test function, with all its inputs.
 

@@ -1,12 +1,12 @@
 [
-  {"instance_id": "psf__requests-1142", "tests": ["test_requests.py::RequestsTestCase::test_no_content_length"], "split": "dev"},
-  {"instance_id": "psf__requests-1537", "tests": ["test_requests.py::RequestsTestCase::test_can_send_nonstring_objects_with_files"], "split": "dev"},
-  {"instance_id": "psf__requests-1635", "tests": ["test_requests.py::RequestsTestCase::test_cookie_persists_via_api"], "split": "dev"},
-  {"instance_id": "psf__requests-2931", "tests": ["test_requests.py::TestRequests::test_binary_put"], "split": "dev"},
-  {"instance_id": "psf__requests-3718", "tests": ["tests/test_requests.py::TestRequests::test_empty_response_has_content_none"], "split": "dev"},
-  {"instance_id": "psf__requests-4718", "tests": ["tests/test_requests.py::TestRequests::test_should_strip_auth_host_change", "tests/test_requests.py::TestRequests::test_should_strip_auth_http_downgrade", "tests/test_requests.py::TestRequests::test_should_strip_auth_https_upgrade", "tests/test_requests.py::TestRequests::test_should_strip_auth_port_change"], "split": "dev"},
-  {"instance_id": "psf__requests-5414", "tests": ["tests/test_requests.py::TestRequests::test_invalid_url[InvalidURL-http://.example.com]"], "split": "dev"},
-  {"instance_id": "psf__requests-4106", "tests": ["tests/test_packages.py::test_can_access_urllib3_attribute", "tests/test_packages.py::test_can_access_idna_attribute", "tests/test_packages.py::test_can_access_chardet_attribute"], "split": "dev"},
-  {"instance_id": "psf__requests-5087", "tests": ["tests/test_lowlevel.py::test_response_content_retains_error"], "split": "dev"},
-  {"instance_id": "pallets__flask-5014", "tests": ["tests/test_blueprints.py::test_empty_name_not_allowed"], "split": "dev"}
+  {"instance_id": "psf__requests-1142", "split": "dev"},
+  {"instance_id": "psf__requests-1537", "split": "dev"},
+  {"instance_id": "psf__requests-1635", "split": "dev"},
+  {"instance_id": "psf__requests-2931", "split": "dev"},
+  {"instance_id": "psf__requests-3718", "split": "dev"},
+  {"instance_id": "psf__requests-4718", "split": "dev"},
+  {"instance_id": "psf__requests-5414", "split": "dev"},
+  {"instance_id": "psf__requests-4106", "split": "dev"},
+  {"instance_id": "psf__requests-5087", "split": "dev"},
+  {"instance_id": "pallets__flask-5014", "split": "dev"}
 ]

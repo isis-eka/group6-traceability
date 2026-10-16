@@ -22,7 +22,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 | Path | Contents |
 |---|---|
 | `prompts/` | Plain-text prompts: `draft_criteria.txt`, `verdict_v1.txt` (bump version for changes) |
-| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json`, `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key; git-ignored, shared privately) |
+| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json` (issue ids and split only), `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key; git-ignored, shared privately) |
 | `src/` | Python scripts |
 | `results/` | `results.jsonl`, score tables, charts |
 | `workspace/` | Cloned requests/flask per case. Git-ignored, rebuilt by scripts |

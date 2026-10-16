@@ -130,3 +130,17 @@ Stop tracking data/labels_v1.jsonl (keep the local copy), gitignore data/labels*
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-16 · Remove right-answer tests from chosen_issues.json
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** data/chosen_issues.json, README.md, AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+Keep only instance_id and split in data/chosen_issues.json, so the right-answer tests live only in the git-ignored labels_v1.jsonl.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
