@@ -116,3 +116,17 @@ Update the version 1 description to 10 dev issues (9 requests, 1 flask). Move al
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-16 · Keep answer keys out of git
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** .gitignore, AGENTS.md, data/labels_v1.jsonl (untracked)
+- **Outcome:** Kept
+
+### What I asked for
+Stop tracking data/labels_v1.jsonl (keep the local copy), gitignore data/labels*.jsonl, and suggest how the team should share the answer key instead.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
