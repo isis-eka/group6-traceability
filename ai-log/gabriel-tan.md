@@ -50,3 +50,20 @@ run_v1.py commands and notes alongside her build_index.py and search_tests.py on
 
 ### What I kept or changed
 [to fill by Gabriel Tan]
+
+## 2026-10-17 · Embedding search by default, keyword search and Ollama as fallbacks
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/run_v1.py, AGENTS.md, README.md
+- **Outcome:** Kept
+
+### What I asked for
+Let run_v1.py use Isis's embedding search (src/search_tests.py, called with instance_id and
+variant) as well as the keyword search (called with the workspace folder). Make the embedding
+search the default, with keyword search as the fallback when there is no OpenAI key or index,
+and Ollama as a flag or the fallback when there is no OpenAI key.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]

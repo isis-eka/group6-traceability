@@ -47,7 +47,7 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 
 Example: `python src/prepare_repo.py psf__requests-2317`
 
-`run_v1.py` currently finds tests with `src/search_bm25.py`, a keyword search, until it is switched to the embedding search in step 5. More scripts (scoring) will be added in `src/`.
+`run_v1.py` uses the embedding search from step 5 and the OpenAI model by default. Without an OpenAI key it falls back to keyword search (`src/search_bm25.py`) and a local Ollama model, and it uses keyword search for issues with no index yet. It prints a NOTE whenever it falls back, and each result records what was used. Use `--search search_bm25` or `--ollama` to choose these on purpose. More scripts (scoring) will be added in `src/`.
 
 ## Version 1 dev set
 

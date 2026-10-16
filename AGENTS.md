@@ -41,13 +41,14 @@ python src/build_index.py                       # -> data/index_v1/<id>__<varian
 python src/search_tests.py psf__requests-1142 covered "<query>"   # top 3 test_ids + scores
 python src/run_v1.py --dry-run --limit 1        # print one verdict prompt, no API call
 python src/run_v1.py                            # data/cases.jsonl -> results/results.jsonl (version 1)
-python src/run_v1.py --ollama                   # same, on local Ollama qwen3:8b (testing only, no key)
+python src/run_v1.py --ollama                   # same, verdicts on local Ollama qwen3:8b (testing only)
 ```
 `covered` = base commit + code fix + its tests; `not_covered` = base commit + code fix only.
-Scripts are run from the repo root. `run_v1.py` searches with `src/search_bm25.py` (keyword search over
-test functions, later the BM25 baseline) by default; `--search <module>` picks any module in `src/` with
-`search_tests(workspace, criterion, k=3)`. The embedding search `src/search_tests.py` takes
-`(instance_id, variant, query, k)` instead, so it does not plug into `run_v1.py` yet.
+Scripts are run from the repo root. `run_v1.py` defaults to the embedding search (`src/search_tests.py`)
+and the OpenAI model from `.env`. Fallbacks, each printed as a NOTE: no OpenAI key or a missing index ->
+keyword search (`src/search_bm25.py`, later the BM25 baseline); no OpenAI key -> local Ollama
+(`qwen3:8b`). `--search search_bm25` and `--ollama [MODEL]` choose them explicitly. Each result row
+records the search and model actually used; only OpenAI + embedding-search rows are reportable.
 Scoring scripts are still to be added in `src/`.
 
 ## JSONL schemas (one JSON object per line)
