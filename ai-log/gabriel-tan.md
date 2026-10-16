@@ -67,3 +67,35 @@ and Ollama as a flag or the fallback when there is no OpenAI key.
 
 ### What I kept or changed
 [to fill by Gabriel Tan]
+
+## 2026-10-17 · Show the model at the start of run_v1.py
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/run_v1.py
+- **Outcome:** Kept
+
+### What I asked for
+When run_v1.py starts, print the model being used, so it is clear whether a run is on OpenAI
+or the Ollama fallback.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]
+
+## 2026-10-17 · Fix non-ASCII characters in patches in prepare_repo.py
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/prepare_repo.py
+- **Outcome:** Kept
+
+### What I asked for
+Fix build_index.py --dry-run failing on the workspaces. prepare_repo.py sent patches to
+git apply as text in the Windows codepage (cp1252), so the u"ööö" test in
+psf__requests-2931's covered copy was written as invalid UTF-8 and the index builder could
+not read it. Patches now go in as UTF-8 bytes; the 2931 workspace was rebuilt.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]

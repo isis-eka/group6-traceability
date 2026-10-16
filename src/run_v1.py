@@ -183,6 +183,8 @@ def main():
     if not args.dry_run:
         client = make_client(ollama=use_ollama)
         out.parent.mkdir(exist_ok=True)
+    print(f"Model: {model} ({'Ollama' if use_ollama else 'OpenAI'}), search: {search_name}, "
+          f"prompt: {args.prompt}, cases: {len(cases)}")
 
     counts = {}
     for case in cases:
