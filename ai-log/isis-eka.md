@@ -88,3 +88,73 @@ Record the 7 chosen issues and their right-answer tests, check them against FAIL
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-16 · Expand dev set to 10 issues and use full test ids
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** data/chosen_issues.json, data/issue_text_v1.jsonl, data/labels_v1.jsonl, README.md
+- **Outcome:** Kept
+
+### What I asked for
+Add psf__requests-4106, psf__requests-5087 and pallets__flask-5014 to the dev set, mark all issues as split "dev", prepare and check their repos, regenerate the issue text, add their labels, and convert every test name to the full pytest id from FAIL_TO_PASS. Note in the README how parametrized tests are matched.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
+
+## 2026-10-16 · Make AGENTS.md the single instructions file
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** AGENTS.md, CLAUDE.md
+- **Outcome:** Kept
+
+### What I asked for
+Update the version 1 description to 10 dev issues (9 requests, 1 flask). Move all instructions into AGENTS.md and make CLAUDE.md a single line, @AGENTS.md, so there is only one file to keep updated.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
+
+## 2026-10-16 · Keep answer keys out of git
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** .gitignore, AGENTS.md, data/labels_v1.jsonl (untracked)
+- **Outcome:** Kept
+
+### What I asked for
+Stop tracking data/labels_v1.jsonl (keep the local copy), gitignore data/labels*.jsonl, and suggest how the team should share the answer key instead.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
+
+## 2026-10-16 · Remove right-answer tests from chosen_issues.json
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** data/chosen_issues.json, README.md, AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+Keep only instance_id and split in data/chosen_issues.json, so the right-answer tests live only in the git-ignored labels_v1.jsonl.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
+
+## 2026-10-16 · Build the test search index for version 1
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/build_index.py, src/search_tests.py, README.md, AGENTS.md, docs/decisions.md, .gitignore
+- **Outcome:** Kept
+
+### What I asked for
+Write build_index.py (one chunk per test function via ast, decorators included, test_id in the README format, embedded locally with text-embedding-3-small, cached by text hash, --dry-run and --only) and search_tests.py (top-k cosine search, command-line use). Dry-run all 10 issues and check the right-answer tests appear only in covered. Document both scripts and add decision 7. Then remove line numbers from the chunk header text so identical tests share one embedding.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

@@ -34,3 +34,19 @@ key is set and a long timeout for slow local calls.
 
 ### What I kept or changed
 [to fill by Gabriel Tan]
+
+## 2026-10-16 · Resolve merge with the embedding search
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** AGENTS.md, CLAUDE.md, README.md
+- **Outcome:** Kept
+
+### What I asked for
+Fix the merge conflicts after pulling Isis's embedding search and dev-set changes: keep her
+AGENTS.md-as-single-instructions-file change (CLAUDE.md is now just @AGENTS.md) and add my
+run_v1.py commands and notes alongside her build_index.py and search_tests.py ones.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]

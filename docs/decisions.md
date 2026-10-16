@@ -32,3 +32,6 @@ final model; GPT-4o is excluded because it is outdated next to these models.
 `prompts/draft_criteria.txt` drafts criteria from the issue's `problem_statement`, and a team
 member reviews each one. Using issue text only stops tests or the fix from leaking into the
 criteria (which would make "covered" trivially true); human review catches vague or wrong drafts.
+
+## 7. Version 1 uses OpenAI embeddings stored locally, not hosted vector stores
+Version 1 uses OpenAI embeddings stored locally instead of hosted vector stores, so each test function stays one chunk and covered/not_covered share embeddings where the test text is identical.
