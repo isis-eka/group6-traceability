@@ -21,7 +21,7 @@ Check your file with: python tools/ai_disclosure.py check-logs
 I asked it to check if there was anything missing to ensure that the model will work well after passing in the results and ground truth. 
 
 ### How I checked it
-Using another coding software, after uploading the folders in, I deliberately put some errors into data/labels_v1.jsonl. 
+[to fill]
 
 ### What I kept or changed
-Kept the main structure of my code for the evaluation, but added in the src/evaluation/sanity_check_labels.py just to be extra safe. 
+Kept the main structure of my code for the evaluation, but added in the src/evaluation/sanity_check_labels.py just to be extra safe. Also added the extra portion on the bar graphs for visuals.  
