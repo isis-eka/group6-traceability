@@ -1,7 +1,11 @@
 #!/bin/sh
 # Blocks AI-assisted commits that have no ai-log entry (SE201 AI Use Disclosure Policy).
 # Enable once per clone: git config core.hooksPath .githooks
-PY=$(command -v python3 || command -v python)
+# First interpreter that actually runs (on Windows, python3 can be a Microsoft Store stub)
+PY=
+for c in python3 python py; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c "" >/dev/null 2>&1; then PY=$c; break; fi
+done
 if [ -z "$PY" ]; then
   echo "ai-disclosure: python not found, skipping check" >&2
   exit 0

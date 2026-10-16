@@ -17,7 +17,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(subprocess.run(["git", "rev-parse", "--show-toplevel"],
-                           capture_output=True, text=True, check=True).stdout.strip())
+                           capture_output=True, text=True, encoding="utf-8", check=True).stdout.strip())
 LOG_DIR = "ai-log"
 TEMPLATE = "your-name.md"
 
@@ -40,8 +40,9 @@ PLACEHOLDER = re.compile(r"^\s*\[\s*to fill", re.M | re.I)
 
 
 def git(*args):
+    # utf-8, not the system codepage: log headings contain "·" (cp1252 on Windows garbles it)
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True,
-                          text=True, check=True).stdout
+                          text=True, encoding="utf-8", check=True).stdout
 
 
 def is_log_file(path):

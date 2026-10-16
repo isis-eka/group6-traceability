@@ -36,10 +36,11 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 | 1 | `python src/load_swebench.py` | Downloads SWE-bench and saves the requests + flask issues to `data/issues.jsonl` |
 | 2 | `python src/prepare_repo.py <instance_id>` | Builds the **covered** and **not covered** versions of the code for one issue in `workspace/` |
 | 3 | `python src/export_issue_text.py` | Writes `data/issue_text.jsonl` with only `instance_id` and `problem_statement`. This is the only file the acceptance criteria owner works from |
+| 4 | `python src/run_v1.py` | Version 1: for each case in `data/cases.jsonl`, finds the 3 most similar tests and asks the AI once. Saves verdicts to `results/results.jsonl`. Add `--dry-run --limit 1` to see the prompt without calling the AI, or `--ollama` to test on a local Ollama model (qwen3:8b) instead of OpenAI |
 
 Example: `python src/prepare_repo.py psf__requests-2317`
 
-More scripts (search index, version 1, scoring) will be added in `src/`.
+`src/search_bm25.py` is a keyword search over the tests, used until the embedding search is ready. More scripts (embedding search, scoring) will be added in `src/`.
 
 ## Rules
 

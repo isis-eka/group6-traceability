@@ -36,9 +36,14 @@ cp .env.example .env        # then paste OPENAI_API_KEY
 python src/load_swebench.py                     # -> data/issues.jsonl (requests + flask only)
 python src/prepare_repo.py psf__requests-2317   # -> workspace/<id>/covered, workspace/<id>/not_covered
 python src/export_issue_text.py                 # -> data/issue_text.jsonl (instance_id + problem_statement only)
+python src/run_v1.py --dry-run --limit 1        # print one verdict prompt, no API call
+python src/run_v1.py                            # data/cases.jsonl -> results/results.jsonl (version 1)
+python src/run_v1.py --ollama                   # same, on local Ollama qwen3:8b (testing only, no key)
 ```
 `covered` = base commit + code fix + its tests; `not_covered` = base commit + code fix only.
-Scripts are run from the repo root. Search index, verdict runner and scoring scripts are still to be added in `src/`.
+Scripts are run from the repo root. `src/search_bm25.py` is the keyword search over test functions
+(stand-in for the embedding index; any search module must provide `search_tests(workspace, criterion, k=3)`,
+chosen with `run_v1.py --search <module>`). Embedding index and scoring scripts are still to be added in `src/`.
 
 ## JSONL schemas (one JSON object per line)
 These schemas are proposed: agree on them as a team before relying on them, and update this file when they change.
