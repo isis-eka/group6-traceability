@@ -14,3 +14,8 @@ venv/
 .DS_Store
 .vscode/
 .idea/
+
+# Raw SWE-bench data (rebuilt by load_swebench.py / export_issue_text.py).
+# issues.jsonl holds the fixes and tests, i.e. the answers.
+data/issues.jsonl
+data/issue_text.jsonl

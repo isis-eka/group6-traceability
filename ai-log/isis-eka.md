@@ -44,7 +44,7 @@ Automate the SE201 AI use disclosure policy for team members who use coding agen
 I tested the hook with an AI-trailer commit, read throught the logs and filled up the how i checked sections, realised that the agent is autofilling the how i checked AI output and adjusted the automated disclosure script to have it fill [ to fill] by default 
 
 ### What I kept or changed 
-realised what i kept and changed should also be written by user and got claude to adjust the instuctions to agents verified the instructions exist in agents.md & claude/md : '- Never write "How I checked it": they are the member's own check and judgment. Leave both as `[to fill by <member name>]` (e.g. `[to fill by Isis Eka]`) and remind them to fill them in. `python tools/ai_disclosure.py summary` lists unfinished entries: any line starting with `[to fill` counts.' 
+ needed to change which sections AI agents should be filling up 
 
 ## 2026-10-15 · Leave "How I checked it" for members to write
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -58,7 +58,7 @@ Agents should not write "How I checked it". Leave it as [to fill by <member name
 tested another agent commit and verified in the disclosure log 
 
 ### What I kept or changed
-kept agent's changes 
+realised what i kept and changed should also be written by user and got claude to adjust the instuctions to agents verified the instructions exist in agents.md & claude/md : '- Never write "How I checked it": they are the member's own check and judgment. Leave both as `[to fill by <member name>]` (e.g. `[to fill by Isis Eka]`) and remind them to fill them in. `python tools/ai_disclosure.py summary` lists unfinished entries: any line starting with `[to fill` counts.'
 
 
 ## 2026-10-15 · Leave "What I kept or changed" for members to write
@@ -74,3 +74,17 @@ Verified in agents.md and claude.md
 
 ### What I kept or changed
 kept changes 
+
+## 2026-10-16 · Prepare 7 issues for version 1
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** .gitignore, data/chosen_issues.json, data/issue_text_v1.jsonl, data/labels_v1.jsonl
+- **Outcome:** Kept
+
+### What I asked for
+Record the 7 chosen issues and their right-answer tests, check them against FAIL_TO_PASS, build covered and not_covered copies, write the issue text for Sammi and the draft answer key for Xiaoning.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
