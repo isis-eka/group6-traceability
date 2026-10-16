@@ -2,6 +2,7 @@
 # outputs two files (evaluation_summary.csv, aggregated_metrics.csv)
 
 import json
+from operator import gt
 import pandas as pd
 from collections import defaultdict
 
@@ -15,6 +16,24 @@ def load_jsonl(filepath: str):
                 continue
             records.append(json.loads(line))
     return records
+
+def normalize_test_name(test_name: str) -> str:
+    """
+    Fix: strip everything starting from '['
+    e.g. "test_invalid_url[InvalidURL-http://.example.com]" → "test_invalid_url"
+    """
+    return test_name.split("[")[0]
+
+
+def normalize_case_id(case_id: str) -> str:
+    """
+    Fix: normalize result case_id to match ground truth
+    psf__requests-1142__ac1__covered → psf__requests-1142-covered
+    """
+    parts = case_id.split("__")
+    repo_bug = parts[0] + "__" + parts[1]
+    verdict_suffix = parts[-1]
+    return f"{repo_bug}-{verdict_suffix}"
 
 # calculate Precision, Recall F1 for retrieved test names
 # true_set: real list of tests (ground truth)
@@ -33,21 +52,21 @@ def calc_prf(true_set: set, pred_set: set):
     return precision, recall, f1, tp, fp, fn
 
 def main():
-    LABELS_PATH = "../../data/labels_v1.jsonl"      # Ground truth
-    RESULTS_PATH = "../../results/labels_v1.jsonl"  # Model output
-    OUTPUT_CSV = "../../results/evaluation_summary.csv"
-    AGG_CSV = "../../results/aggregated_metrics.csv"
+    LABELS_PATH = "data/labels_v1.jsonl"        # Ground truth
+    RESULTS_PATH = "data/results.jsonl"         # Model output
+    OUTPUT_CSV = "results/evaluation_summary.csv"
+    AGG_CSV = "results/aggregated_metrics.csv"
 
     # load ground truth and model output 
     labels_raw = load_jsonl(LABELS_PATH)
     results_raw = load_jsonl(RESULTS_PATH)
 
-    # conver ground truth list itno a dictionary: case_id to ground truth entry 
+    # convert ground truth list into a dictionary: case_id to ground truth entry 
     gt_map = {r["case_id"]: r for r in labels_raw}
 
     # track aggregate metics for each model version
     rows = []
-    per_version = defaultdict(lambda: {
+    per_group = defaultdict(lambda: {
         "total":0,
         "verdict_correct":0,
         "needs_review":0,
@@ -60,37 +79,51 @@ def main():
 
     # loop through every prediction made by the model 
     for res in results_raw:
-        cid = res["case_id"]
-        # skip any prediction where case_id is missing from ground truth
-        if cid not in gt_map:
-            print(f"WARNING: case {cid} missing from ground truth labels, skipping")
+        raw_result_cid = res["case_id"]
+        norm_cid = normalize_case_id(raw_result_cid)
+
+        if norm_cid not in gt_map:
+            print(f"WARNING: normalized case {norm_cid} (original={raw_result_cid}) missing from ground truth labels, skipping")
             continue
-        gt = gt_map[cid]
+
+        gt = gt_map[norm_cid]
         ver = res["version"]
+        search_strategy = res["search"]
+
         pred_v = res["verdict"]
         gt_v = gt["verdict"]
 
-        # checkc if verdict matches ground truth (1 is correct, 0 is wrong)
+        # check if verdict matches ground truth (1 is correct, 0 is wrong)
         verdict_ok = 1 if pred_v == gt_v else 0
         # count cases where model output "needs_review"
         need_review = 1 if pred_v == "needs_review" else 0
-        # false alarm: model says not covered, but grounf truth has tests 
+        # false alarm: model says not covered, but ground truth has tests
         false_alarm = 1 if (pred_v == "not_covered" and len(gt["tests"])>0) else 0
+        false_all_clear = 1 if (pred_v == "covered" and gt_v == "not_covered") else 0
 
         # compute test retrieval metrics 
-        gt_tests = set(gt["tests"])
-        pred_tests = set(res.get("tests_found", []))
-        prec, rec, f1, _,_,_ = calc_prf(gt_tests, pred_tests)
+        gt_tests_raw = gt["tests"]
+        pred_tests_raw = res.get("tests_found", [])
+        gt_tests = set(normalize_test_name(t) for t in gt_tests_raw)
+        pred_tests = set(normalize_test_name(t) for t in pred_tests_raw)
+
+        if len(gt["tests"]) > 0:
+            prec, rec, f1, _,_,_ = calc_prf(gt_tests, pred_tests)
+        else:
+            prec, rec, f1 = None, None, None
 
         # save the case data for csv
         rows.append({
-            "case_id":cid,
+            "case_id":raw_result_cid,
+            "normalized_case_id":norm_cid,
+            "search":search_strategy,
             "version":ver,
             "gt_verdict":gt_v,
             "pred_verdict":pred_v,
             "verdict_correct":verdict_ok,
             "needs_review":need_review,
             "false_alarm":false_alarm,
+            "false_all_clear":false_all_clear,
             "precision":prec,
             "recall":rec,
             "f1":f1,
@@ -103,15 +136,20 @@ def main():
         })
 
         # add the case metrics to aggregate totals 
-        v = per_version[ver]
-        v["total"] +=1
-        v["verdict_correct"] += verdict_ok
-        v["needs_review"] += need_review
-        v["false_alarm"] += false_alarm
-        v["sum_prec"] += prec
-        v["sum_rec"] += rec
-        v["sum_f1"] += f1
-        v["prf_count"] += 1
+        group_key = (ver, search_strategy)
+        g = per_group[group_key]
+        g["total"] +=1
+        g["verdict_correct"] += verdict_ok
+        g["needs_review"] += need_review
+        g["false_alarm"] += false_alarm
+        g["false_all_clear"] += false_all_clear
+
+        if prec is not None:
+            g["sum_prec"] += prec
+            g["sum_rec"] += rec
+            g["sum_f1"] += f1
+            g["prf_count"] +=1
+
 
     # write per-case data into csv
     df = pd.DataFrame(rows)
@@ -122,31 +160,37 @@ def main():
     print("\n==== AGGREGATED EVALUATION RESULTS ====")
 
     # calculate averages and print summary for each version
-    for ver, data in per_version.items():
+    for (ver, search_strategy), data in per_group.items():
         total = data["total"]
         acc = data["verdict_correct"] / total               # verdict accuracy
         nr_rate = data["needs_review"] / total              # percentage of cases marked as "needs_review"
-        fa_rate = data["false_alarm"] / total               # false alarm rate 
+        fa_rate = data["false_alarm"] / total               # false alarm rate
+        fac_rate = data["false_all_clear"] / total          # false all clear rate
         avg_p = data["sum_prec"] / data["prf_count"]        # avg precision 
         avg_r = data["sum_rec"] / data["prf_count"]         # avg recall 
         avg_f = data["sum_f1"] / data["prf_count"]          # avg F1
-        print(f"\nVersion {ver}")
+        print(f"\nVersion {ver}, Search Strategy: {search_strategy}")
         print(f"Total cases: {total}")
         print(f"Verdict Accuracy: {acc:.3f}")
         print(f"Needs Review Rate: {nr_rate:.3f}")
         print(f"False Alarm Rate: {fa_rate:.3f}")
+        print(f"False All Clear Rate: {fac_rate:.3f}")
         print(f"Avg Precision: {avg_p:.3f}, Recall: {avg_r:.3f}, F1: {avg_f:.3f}")
         agg_rows.append({
             "version":ver,
+            "search_strategy":search_strategy,
             "total_cases":total,
             "verdict_accuracy":acc,
             "needs_review_rate":nr_rate,
             "false_alarm_rate":fa_rate,
+            "false_all_clear_rate":fac_rate,
             "avg_precision":avg_p,
             "avg_recall":avg_r,
-            "avg_f1":avg_f
+            "avg_f1":avg_f,
+            "num_covered_cases_for_prf":data["prf_count"]
         })
-    # save summary metrics to csv
+
+    # save summary metrics to csv 
     agg_df = pd.DataFrame(agg_rows)
     agg_df.to_csv(AGG_CSV, index=False, encoding="utf-8")
     print(f"\nSaved aggregate metrics: {AGG_CSV}")
