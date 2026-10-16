@@ -5,9 +5,9 @@ tested: `covered`, `partial`, `not_covered` or `needs_review`. Evaluated on SWE-
 from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 
 ## Hard rules
-- **Never read `data/labels.jsonl` or `data/labels_v1.jsonl` or send them (or anything derived from them) to the model.** They are the answer key; only scoring code may open them.
+- **Never read `data/labels.jsonl` or `data/labels_v1.jsonl` or send them (or anything derived from them) to the model.** They are the answer key; only scoring code may open them. Never commit them (`data/labels*.jsonl` is git-ignored); they are shared privately.
 - **Acceptance criteria are drafted from issue text only** (`problem_statement`). Never use tests, `test_patch`, `patch`, `FAIL_TO_PASS` or issue comments when drafting or reviewing them.
-- **The acceptance criteria owner works only from `data/issue_text.jsonl`.** Never show them, or include in criteria-drafting prompts, any patch, test_patch, FAIL_TO_PASS or test file.
+- **The acceptance criteria owner works only from issue-text files** (`data/issue_text.jsonl`; for version 1, `data/issue_text_v1.jsonl`). Never show them, or include in criteria-drafting prompts, any patch, test_patch, FAIL_TO_PASS or test file.
 - **Never commit `.env`.** Keys live only in `.env` (copied from `.env.example`).
 - Default model: **`gpt-6-luna`** (override with `OPENAI_MODEL` in `.env`). `gpt-6.1-sol` is for the one final run only. Never GPT-4o.
 - Agent limits: **max 10 tool calls** per case, **read-only tools only** (`search_tests`, `grep`, `read_file`; no writes, no MCP, no coverage tracing), **max ~200 lines per file read**.

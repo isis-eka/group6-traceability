@@ -9,7 +9,7 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 | Folder | What goes here | Who mainly works here |
 |---|---|---|
 | `prompts/` | Instructions we send to the AI (plain text) | Sammi |
-| `data/` | `issues.jsonl` (SWE-bench issues), `issue_text.jsonl` (issue text only), `cases.jsonl`, `labels.jsonl` | Isis Eka, Xiaoning |
+| `data/` | `issues.jsonl` (all 55 SWE-bench issues) and `issue_text.jsonl` (their text only): **not uploaded**, rebuilt by scripts. Version 1: `chosen_issues.json` (the 10 dev issues), `issue_text_v1.jsonl` (their text, for drafting criteria), `labels_v1.jsonl` (answer key: **not uploaded**, shared privately), `index_v1/` (test search index: **not uploaded**, rebuilt by `build_index.py`). Later: `cases.jsonl`, `labels.jsonl` | Isis Eka, Xiaoning |
 | `src/` | Python scripts | Gabriel, Isis Eka |
 | `results/` | `results.jsonl`, score tables, charts | Xiaoning |
 | `workspace/` | Downloaded copies of requests/flask. **Not uploaded to GitHub** | (created by scripts) |
@@ -18,10 +18,15 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 ## One-time setup
 
 1. Install Python 3.10 or newer.
-2. In this folder, run:
+2. In this folder, create a virtual environment (a private copy of Python for this project) and install the packages:
    ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
    pip install -r requirements.txt
    ```
+   On Windows, use `python` instead of `python3`, and `.venv\Scripts\activate` instead of the `source` line.
+
+   **Each time you open a new terminal**, run `source .venv/bin/activate` again before any `python` command. If you see `python: command not found`, this is why.
 3. Copy `.env.example` to a new file called `.env` and paste the OpenAI API key into it.
    **Never upload `.env` to GitHub.** It is already listed in `.gitignore`.
 4. Turn on the AI disclosure check (Claude Code does this for you automatically):
@@ -35,13 +40,17 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 |---|---|---|
 | 1 | `python src/load_swebench.py` | Downloads SWE-bench and saves the requests + flask issues to `data/issues.jsonl` |
 | 2 | `python src/prepare_repo.py <instance_id>` | Builds the **covered** and **not covered** versions of the code for one issue in `workspace/` |
-| 3 | `python src/export_issue_text.py` | Writes `data/issue_text.jsonl` with only `instance_id` and `problem_statement`. This is the only file the acceptance criteria owner works from |
+| 3 | `python src/export_issue_text.py` | Writes `data/issue_text.jsonl` with only `instance_id` and `problem_statement`, for all 55 issues. The acceptance criteria owner works only from issue-text files like this (for version 1: `issue_text_v1.jsonl`), never from `issues.jsonl` |
 | 4 | `python src/build_index.py` | Splits each covered/not_covered copy's test files into one chunk per test function and embeds them into `data/index_v1/`. Run `--dry-run` first: it only writes the chunks to `workspace/_chunks/`, free. `--only <instance_id>` does one issue |
 | 5 | `python src/search_tests.py <instance_id> <covered\|not_covered> "<query>"` | Prints the 3 test functions most similar to the query, with scores |
 
 Example: `python src/prepare_repo.py psf__requests-2317`
 
 More scripts (version 1, scoring) will be added in `src/`.
+
+## Version 1 dev set
+
+Version 1 runs on **10 dev issues**: 9 from `psf/requests` and 1 from `pallets/flask`, listed in `data/chosen_issues.json`. Each has a covered and a not_covered copy, so that's 20 cases. We tune prompts on these, then freeze them. The reported results come from a separate test set of new issues.
 
 ## Test IDs
 
@@ -56,7 +65,7 @@ Every file names a test the same way, as a pytest id copied exactly from SWE-ben
 ## Rules
 
 - Draft acceptance criteria from the issue text only. Never look at the tests or the fix while writing or reviewing them.
-- `labels.jsonl` (the answer key) is never sent to the AI.
+- The answer key (`labels*.jsonl`) is never sent to the AI and never committed: git ignores it. It's shared privately with the answer key and scoring owners (Xiaoning, Gabriel), never with the acceptance criteria owner.
 - Commit small and often, with a clear message (e.g. "add verdict prompt v2").
 
 ## AI use disclosure (SE201 policy)
