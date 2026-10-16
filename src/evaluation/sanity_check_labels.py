@@ -60,4 +60,4 @@ def sanity_check_labels(labels_path):
 
 # to run this check every time the file is executed 
 if __name__ == "__main__":
-    sanity_check_labels("../../data/labels_v1.jsonl")
+    sanity_check_labels("data/labels_v1.jsonl")

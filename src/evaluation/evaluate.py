@@ -2,7 +2,6 @@
 # outputs two files (evaluation_summary.csv, aggregated_metrics.csv)
 
 import json
-from operator import gt
 import pandas as pd
 from collections import defaultdict
 
@@ -53,7 +52,7 @@ def calc_prf(true_set: set, pred_set: set):
 
 def main():
     LABELS_PATH = "data/labels_v1.jsonl"        # Ground truth
-    RESULTS_PATH = "data/results.jsonl"         # Model output
+    RESULTS_PATH = "results/results.jsonl"        # Model output
     OUTPUT_CSV = "results/evaluation_summary.csv"
     AGG_CSV = "results/aggregated_metrics.csv"
 
@@ -71,6 +70,7 @@ def main():
         "verdict_correct":0,
         "needs_review":0,
         "false_alarm":0,
+        "false_all_clear":0,
         "sum_prec":0.0,
         "sum_rec":0.0,
         "sum_f1":0.0,

@@ -186,3 +186,17 @@ Add decisions 8–10 (10-issue dev set then a separate test set, answer key kept
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-17 · Fix Xiaoning's evaluation scripts
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/evaluation/evaluate.py, src/evaluation/sanity_check_labels.py, requirements.txt
+- **Outcome:** Changed
+
+### What I asked for
+Review Xiaoning's latest evaluation scripts and make the remaining fixes for her: add the missing false_all_clear counter (evaluate.py crashed with a KeyError), read results from results/results.jsonl, run the label check from the repo root, remove an unused import, and add pandas and matplotlib to requirements.txt. Tested all three scripts on a small fake answer key and fake results.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
