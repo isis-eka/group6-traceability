@@ -4,6 +4,8 @@ A tool that reads a requirement (acceptance criterion) and a project's tests and
 
 We test it on real GitHub issues from the **requests** and **flask** projects, taken from the SWE-bench dataset.
 
+For how the scripts and files fit together, and who owns each step, see the diagrams in [`docs/architecture.md`](docs/architecture.md).
+
 ## Folders
 
 | Folder | What goes here | Who mainly works here |
@@ -13,6 +15,7 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 | `src/` | Python scripts | Gabriel, Isis Eka |
 | `results/` | `results.jsonl`, score tables, charts | Xiaoning |
 | `workspace/` | Downloaded copies of requests/flask. **Not uploaded to GitHub** | (created by scripts) |
+| `docs/` | `architecture.md` (pipeline and data model diagrams), `decisions.md` (design decisions and why) | Everyone |
 | `ai-log/` | One AI use log per member (`isis-eka.md`, ...). Start from `your-name.md` | Everyone |
 
 ## One-time setup
