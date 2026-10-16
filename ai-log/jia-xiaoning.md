@@ -15,7 +15,7 @@ Check your file with: python tools/ai_disclosure.py check-logs
 ## 2026-10-16 · Checking the Asnwer Key
 - **Tool (model):** Doubao (2.31.4_win)
 - **Files:** data/labels_v1.jsonl, task outline, raw code for evaluation
-- **Outcome:** suggested to add in src/evaluation/sanity_check_labels.py
+- **Outcome:** Changed
 
 ### What I asked for
 I asked it to check if there was anything missing to ensure that the model will work well after passing in the results and ground truth. 
