@@ -4,6 +4,8 @@ A tool that reads a requirement (acceptance criterion) and a project's tests and
 
 We test it on real GitHub issues from the **requests** and **flask** projects, taken from the SWE-bench dataset.
 
+For how the scripts and files fit together, and who owns each step, see the diagrams in [`docs/architecture.md`](docs/architecture.md).
+
 ## Folders
 
 | Folder | What goes here | Who mainly works here |
@@ -13,6 +15,7 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 | `src/` | Python scripts | Gabriel, Isis Eka |
 | `results/` | `results.jsonl`, score tables, charts | Xiaoning |
 | `workspace/` | Downloaded copies of requests/flask. **Not uploaded to GitHub** | (created by scripts) |
+| `docs/` | `architecture.md` (pipeline and data model diagrams), `decisions.md` (design decisions and why) | Everyone |
 | `ai-log/` | One AI use log per member (`isis-eka.md`, ...). Start from `your-name.md` | Everyone |
 
 ## One-time setup
@@ -47,7 +50,7 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 
 Example: `python src/prepare_repo.py psf__requests-2317`
 
-`run_v1.py` currently finds tests with `src/search_bm25.py`, a keyword search, until it is switched to the embedding search in step 5. More scripts (scoring) will be added in `src/`.
+`run_v1.py` uses the embedding search from step 5 and the OpenAI model by default. Without an OpenAI key it falls back to keyword search (`src/search_bm25.py`) and a local Ollama model, and it uses keyword search for issues with no index yet. It prints a NOTE whenever it falls back, and each result records what was used. Use `--search search_bm25` or `--ollama` to choose these on purpose. More scripts (scoring) will be added in `src/`.
 
 ## Version 1 dev set
 

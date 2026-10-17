@@ -15,7 +15,10 @@ WORKSPACE = Path("workspace")
 
 
 def run(cmd, cwd=None, stdin=None):
-    subprocess.run(cmd, cwd=cwd, input=stdin, text=True, check=True)
+    # Patches go in as UTF-8 bytes: text mode would use the system codepage (cp1252 on
+    # Windows) and write non-ASCII characters in a patch as the wrong bytes.
+    data = stdin.encode("utf-8") if stdin is not None else None
+    subprocess.run(cmd, cwd=cwd, input=data, check=True)
 
 
 def load_issue(instance_id):

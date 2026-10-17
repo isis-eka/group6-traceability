@@ -158,3 +158,45 @@ Write build_index.py (one chunk per test function via ast, decorators included, 
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-16 · Make the embedding search fit run_v1.py
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/search_tests.py, AGENTS.md, README.md
+- **Outcome:** Kept
+
+### What I asked for
+Change search_tests.py to Gabriel's interface, search_tests(workspace, criterion, k=3) returning "code", so run_v1.py --search search_tests works. Test it and commit.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
+
+## 2026-10-17 · Add architecture diagrams and decisions 8–10
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** docs/architecture.md, docs/decisions.md, README.md
+- **Outcome:** Kept
+
+### What I asked for
+Add decisions 8–10 (10-issue dev set then a separate test set, answer key kept off GitHub, covered/not_covered copies for version 1 up to the midpoint checkpoint with partial added after). Add a pipeline diagram and a data model diagram in Mermaid to docs/architecture.md, check they render, and link them from the README.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
+
+## 2026-10-17 · Fix Xiaoning's evaluation scripts
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/evaluation/evaluate.py, src/evaluation/sanity_check_labels.py, requirements.txt
+- **Outcome:** Changed
+
+### What I asked for
+Review Xiaoning's latest evaluation scripts and make the remaining fixes for her: add the missing false_all_clear counter (evaluate.py crashed with a KeyError), read results from results/results.jsonl, run the label check from the repo root, remove an unused import, and add pandas and matplotlib to requirements.txt. Tested all three scripts on a small fake answer key and fake results.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

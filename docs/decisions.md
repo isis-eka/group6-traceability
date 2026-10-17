@@ -35,3 +35,21 @@ criteria (which would make "covered" trivially true); human review catches vague
 
 ## 7. Version 1 uses OpenAI embeddings stored locally, not hosted vector stores
 Version 1 uses OpenAI embeddings stored locally instead of hosted vector stores, so each test function stays one chunk and covered/not_covered share embeddings where the test text is identical.
+
+## 8. A 10-issue dev set, then a separate test set
+Version 1 is tuned on 10 dev issues (9 `psf/requests`, 1 `pallets/flask`) listed in
+`data/chosen_issues.json`. Prompts are frozen after tuning, and reported results come from a
+separate test set of new issues, so scores aren't inflated by tuning on the same issues.
+
+## 9. The answer key stays off GitHub
+`labels*.jsonl` is git-ignored and shared privately with the answer key and scoring owners,
+never with the acceptance criteria owner. If it were in the repo, the criteria owner or an AI
+tool working in the repo could see which tests are the right answer, and results would no
+longer be a fair test.
+
+## 10. Version 1 judges each criterion on a covered and a not_covered copy
+Up to the midpoint checkpoint, every criterion runs on two copies of the code: with the fix's
+tests (right answer: `covered`) and without them (right answer: `not_covered`). This checks the
+tool can say "not covered", not just find tests. `partial` cases are added after the
+checkpoint. Tests are matched by pytest id at function level, ignoring parametrize `[...]`
+parts, because one search chunk is a whole test function.
