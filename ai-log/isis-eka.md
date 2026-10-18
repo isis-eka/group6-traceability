@@ -27,10 +27,10 @@ Update folder owners after the role swap, add a script that writes data/issue_te
 with only instance_id and problem_statement, and a rule that the criteria owner works only from that file.
 
 ### How I checked it
-[to fill - have yet to verify JSON schema] 
+Verified in README.md, AGENTS.md, CLAUDE.md and tested the export issue text script and verified it worked fine 
 
 ### What I kept or changed
-Kept written. 
+Kept Changes. 
 
 ## 2026-10-15 · Automated AI use disclosure checks
 - **Tool (model):** Claude Code (Claude Opus 5.5)
