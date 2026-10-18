@@ -214,3 +214,17 @@ Run version 1 once on all 24 cases with gpt-6-luna as a mock run (embedding sear
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-18 · Write up the version 1 mock run results
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** docs/results/results_v1_mock.md
+- **Outcome:** Kept
+
+### What I asked for
+Write up the two mock runs in docs/results/results_v1_mock.md: what we ran, the scores for both searches, how to read them, the failures observed and next steps. Note at the top that it is a mock run to test the pipeline end to end, because the answer key has no partial cases yet.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
