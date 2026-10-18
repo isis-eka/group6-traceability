@@ -57,6 +57,30 @@ Example: `python src/prepare_repo.py psf__requests-2317`
 **Where results go:** `results/<split>/<round>/<search>.jsonl`. The split is `dev` (the issues we tune on) or `test` (one final run, the reported results). The round is named after the prompt version (`v1`, `v2`), with a short suffix for a variation (`v1_partial`). The file is named after the search (`embedding`, `bm25`). Pass it with `--out`:
 `python src/run_v1.py --search search_bm25 --out results/dev/v1/bm25.jsonl`. Scores and charts are saved in the same folder, and each round gets a `README.md` saying what was run, the results, failures and next steps (written by hand).
 
+## Demo: version 1 on one requirement
+
+`src/demo.py` runs version 1 on one case and shows each step, waiting for Enter between them:
+
+1. the acceptance criterion
+2. the 3 tests the search finds, with their similarity score and code
+3. the AI's verdict, its reason and the tests it relied on (one real call, a fraction of a US cent)
+4. the right answer from the answer key, and whether the AI got it right
+
+It uses `run_v1.py`'s own search, prompt and model, so it gives the same answers as a real run. It saves nothing. The answer key is opened only in step 4, after the AI has answered.
+
+After the one-time setup:
+```bash
+source .venv/bin/activate
+python src/load_swebench.py                          # once: downloads the issues
+python src/prepare_repo.py psf__requests-5414          # the code copies for this issue
+python src/build_index.py --only psf__requests-5414    # its search index
+python src/demo.py psf__requests-5414__ac1__not_covered
+```
+- `python src/demo.py --list` shows every case id. Each criterion has a `covered` case (its tests are in the code) and a `not_covered` case (they were removed).
+- `--no-pause` prints all 4 steps at once.
+- Step 4 needs `data/labels_v1.jsonl`, which is shared privately, not on GitHub. Without it, steps 1–3 still run and step 4 says so.
+- Good cases to try: `psf__requests-5414__ac1__not_covered` (a look-alike test exists, but the AI correctly says not covered) and the `psf__requests-1142__ac1__covered` / `__not_covered` pair (same requirement, with and without its test).
+
 ## Version 1 dev set
 
 Version 1 runs on **10 dev issues**: 9 from `psf/requests` and 1 from `pallets/flask`, listed in `data/chosen_issues.json`. Each criterion is judged on a covered and a not_covered copy: 12 criteria, so 24 cases. We tune prompts on these, then freeze them. The reported results come from a separate test set of new issues.

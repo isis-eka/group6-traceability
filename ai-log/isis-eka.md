@@ -258,3 +258,17 @@ viewed the results in results/dev/v1_k5/embedding_metrics.csv
 
 ### What I kept or changed
 kept changes. 
+
+## 2026-10-18 · Step-by-step demo of version 1
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/demo.py, README.md
+- **Outcome:** Kept
+
+### What I asked for
+On a new `demo` branch, write src/demo.py: a walkthrough of version 1 for one case that pauses between steps and shows the criterion, the top 3 tests from search, the AI's verdict and reason (one real call), then the right answer from the answer key, read only after the AI call and never put in the prompt. Run it on 1142 covered and not_covered and 5414 not_covered. Then add README instructions so someone else can run the demo, and make step 4 explain itself when the answer key isn't there.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
