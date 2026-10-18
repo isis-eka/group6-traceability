@@ -184,10 +184,10 @@ kept changes
 Review Xiaoning's latest evaluation scripts and make the remaining fixes for her: add the missing false_all_clear counter (evaluate.py crashed with a KeyError), read results from results/results.jsonl, run the label check from the repo root, remove an unused import, and add pandas and matplotlib to requirements.txt. Tested all three scripts on a small fake answer key and fake results.
 
 ### How I checked it
-[to fill by Isis Eka]
+verified missing false_all_clear counter is added and xiaoning checked by testing thecode  it on her side as well 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+Kept changes
 
 ## 2026-10-18 · Mock runs of version 1 and results file naming
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -268,7 +268,7 @@ kept changes.
 On a new `demo` branch, write src/demo.py: a walkthrough of version 1 for one case that pauses between steps and shows the criterion, the top 3 tests from search, the AI's verdict and reason (one real call), then the right answer from the answer key, read only after the AI call and never put in the prompt. Run it on 1142 covered and not_covered and 5414 not_covered. Then add README instructions so someone else can run the demo, and make step 4 explain itself when the answer key isn't there.
 
 ### How I checked it
-[to fill by Isis Eka]
+ran the demo in my own terminal and verified demo output is as intended
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes 
