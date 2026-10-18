@@ -21,7 +21,7 @@ Check your file with: python tools/ai_disclosure.py check-logs
 I asked it to check if there was anything missing to ensure that the model will work well after passing in the results and ground truth. 
 
 ### How I checked it
-[to fill]
+I made deliberate mistakes to the ground truth file such that I would run into an error, then I implemented the file to check that it works well
 
 ### What I kept or changed
 Kept the main structure of my code for the evaluation, but added in the src/evaluation/sanity_check_labels.py just to be extra safe. Also added the extra portion on the bar graphs for visuals.  
