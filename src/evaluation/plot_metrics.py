@@ -1,6 +1,7 @@
 # generates charts
-# usage: python src/evaluation/plot_metrics.py results/v1_mock_embedding_metrics.csv [more _metrics.csv ...]
+# usage: python src/evaluation/plot_metrics.py results/dev/v1/embedding_metrics.csv results/dev/v1/bm25_metrics.csv
 # several files are drawn side by side in one chart, to compare runs (e.g. embedding vs bm25)
+# charts are saved next to the first file (accuracy.png, prf.png)
 
 import sys
 from pathlib import Path
@@ -14,8 +15,7 @@ import matplotlib.pyplot as plt
 # saves the images into results folder 
 def plot_all(csv_paths):
     df = pd.concat([pd.read_csv(p) for p in csv_paths], ignore_index=True)
-    # one file: name charts after its run; several: a comparison chart
-    name = Path(csv_paths[0]).stem.removesuffix("_metrics") if len(csv_paths) == 1 else "comparison"
+    out_dir = Path(csv_paths[0]).parent
     plt.rcParams["figure.figsize"] = (12,6)
 
     # Combine version + search strategy for readable x-axis labels
@@ -36,7 +36,7 @@ def plot_all(csv_paths):
     ax.set_ylabel("Score (0 to 1)")
     ax.set_title("Verdict Accuracy, False Alarm & False All-Clear Rate")
     ax.legend()
-    plt.savefig(f"results/{name}_accuracy.png", dpi=300, bbox_inches="tight")
+    plt.savefig(out_dir / "accuracy.png", dpi=300, bbox_inches="tight")
     plt.close()
 
     # bar chart 2: Precision, Recall and F1 scores for retrieval
@@ -51,13 +51,13 @@ def plot_all(csv_paths):
     ax2.set_ylabel("Score (0 to 1)")
     ax2.set_title("Test Retrieval Precision / Recall / F1")
     ax2.legend()
-    plt.savefig(f"results/{name}_prf.png", dpi=300, bbox_inches="tight")
+    plt.savefig(out_dir / "prf.png", dpi=300, bbox_inches="tight")
     plt.close()
 
-    print("✅ Side-by-side charts saved to results folder.")
+    print(f"✅ Side-by-side charts saved to {out_dir}/")
 
 # Run plotting when this file is executed
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        sys.exit("Usage: python src/evaluation/plot_metrics.py results/<run>_metrics.csv [...]")
+        sys.exit("Usage: python src/evaluation/plot_metrics.py results/<split>/<round>/<search>_metrics.csv [...]")
     plot_all(sys.argv[1:])

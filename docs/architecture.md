@@ -31,13 +31,13 @@ flowchart TB
         index --> search
         ws --> search
         prompt["prompts/verdict_v1.txt"] --> run
-        run --> results["results/results.jsonl"]
+        run --> results["results/dev/v1/<br/>embedding.jsonl, bm25.jsonl"]
     end
 
     subgraph scoring["Scoring (Xiaoning)"]
         labels["labels_v1.jsonl<br/>(private, not uploaded)"] --> eval["src/evaluation/"]
         results --> eval
-        eval --> scores["scores + charts<br/>in results/"]
+        eval --> scores["scores, charts + README<br/>in the same folder"]
     end
 
     swe --> load

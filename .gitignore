@@ -27,4 +27,4 @@ data/labels*.jsonl
 data/index_v1/
 
 # Per-case score tables list the answer key tests, so they stay off GitHub like labels*.jsonl
-results/*_summary.csv
+results/**/*_summary.csv

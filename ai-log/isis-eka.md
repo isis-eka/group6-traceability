@@ -228,3 +228,17 @@ Write up the two mock runs in docs/results/results_v1_mock.md: what we ran, the 
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-18 · Organise results into one folder per round
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** results/dev/v1/, src/evaluation/evaluate.py, src/evaluation/plot_metrics.py, .gitignore, README.md, docs/architecture.md
+- **Outcome:** Changed
+
+### What I asked for
+Restructure results/ into results/<split>/<round>/ (dev or test, then prompt version), with files named after the search and the write-up as the folder's README.md. Move the mock run there as results/dev/v1/, make evaluate.py and plot_metrics.py save next to the run file, and update the docs.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

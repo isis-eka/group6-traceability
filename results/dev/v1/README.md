@@ -1,6 +1,6 @@
-# Version 1 mock run results (2026-10-18)
+# Dev set, version 1 (2026-10-18)
 
-> **This is a mock run.** Its purpose is to test the pipeline end to end: criteria → test search →
+> **This is a pipeline test (mock run).** Its purpose is to test the pipeline end to end: criteria → test search →
 > AI verdict → scoring → charts. The answer key does not have `partial` cases yet: every case is
 > labelled only `covered` or `not_covered`, so any `partial` answer counts as wrong. The scores
 > below show that the pipeline works and where it fails, not how good the tool is.
@@ -14,16 +14,16 @@
 | Prompt | `prompts/verdict_v1.txt`: one AI call per case, shown the top 3 tests from search |
 | Searches | Embedding search (`search_tests`) and keyword search (`search_bm25`), one run each |
 | Answer key | `data/labels_v1.jsonl`, matched by issue + copy |
-| Files | `results/v1_mock_embedding.jsonl`, `results/v1_mock_bm25.jsonl` (AI answers); `results/*_metrics.csv` (scores); `results/comparison_*.png` (charts) |
+| Files (this folder) | `embedding.jsonl`, `bm25.jsonl` (AI answers); `*_metrics.csv` (scores); `accuracy.png`, `prf.png` (charts). The per-case `*_summary.csv` files are git-ignored because they list the answer key tests |
 | Cost | About 1 US cent per run (about 12,400 input and 6,300 output tokens) |
 
 To reproduce:
 ```bash
-python src/run_v1.py --out results/v1_mock_embedding.jsonl
-python src/run_v1.py --search search_bm25 --out results/v1_mock_bm25.jsonl
-python src/evaluation/evaluate.py results/v1_mock_embedding.jsonl
-python src/evaluation/evaluate.py results/v1_mock_bm25.jsonl
-python src/evaluation/plot_metrics.py results/v1_mock_embedding_metrics.csv results/v1_mock_bm25_metrics.csv
+python src/run_v1.py --out results/dev/v1/embedding.jsonl
+python src/run_v1.py --search search_bm25 --out results/dev/v1/bm25.jsonl
+python src/evaluation/evaluate.py results/dev/v1/embedding.jsonl
+python src/evaluation/evaluate.py results/dev/v1/bm25.jsonl
+python src/evaluation/plot_metrics.py results/dev/v1/embedding_metrics.csv results/dev/v1/bm25_metrics.csv
 ```
 
 ## Results
@@ -39,8 +39,8 @@ python src/evaluation/plot_metrics.py results/v1_mock_embedding_metrics.csv resu
 | Test precision | 0.278 | 0.306 | Share of the 3 tests shown that are right |
 | Answers given | covered 5, not_covered 5, **partial 14** | covered 4, not_covered 6, **partial 14** | |
 
-![Verdict accuracy, false alarm and false all-clear rate](../../results/comparison_accuracy.png)
-![Test search precision, recall and F1](../../results/comparison_prf.png)
+![Verdict accuracy, false alarm and false all-clear rate](accuracy.png)
+![Test search precision, recall and F1](prf.png)
 
 ## How to read the numbers
 
@@ -80,6 +80,6 @@ python src/evaluation/plot_metrics.py results/v1_mock_embedding_metrics.csv resu
    than the issue needs.
 3. **Answer key** (Xiaoning): check 4718's accepted tests, then add `partial` labels per criterion
    after the checkpoint.
-4. **Rerun** both searches with `verdict_v2` (Gabriel), twice each to see how much answers vary, then
+4. **Rerun** both searches with `verdict_v2` into `results/dev/v2/` (Gabriel), twice each to see how much answers vary, then
    decide the default search.
 5. **Test set:** freeze the prompt, then run once on the separate test issues for the reported results.
