@@ -200,3 +200,17 @@ Review Xiaoning's latest evaluation scripts and make the remaining fixes for her
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-18 · Mock runs of version 1 and results file naming
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/evaluation/evaluate.py, src/evaluation/plot_metrics.py, README.md, .gitignore, results/v1_mock_embedding.jsonl, results/v1_mock_bm25.jsonl, results/*_metrics.csv, results/comparison_*.png
+- **Outcome:** Changed
+
+### What I asked for
+Run version 1 once on all 24 cases with gpt-6-luna as a mock run (embedding search), then again with keyword search (BM25), and score both with Xiaoning's scripts. Name results files <version>_<run>_<search>.jsonl, let evaluate.py and plot_metrics.py take the run file so scores and charts are named after it, and document the naming in the README. Keep the per-case _summary.csv files out of git because they list the answer key tests.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

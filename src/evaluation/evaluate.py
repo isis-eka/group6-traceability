@@ -1,7 +1,10 @@
 # actual evaluation by comparing model predictions against the ground truth
-# outputs two files (evaluation_summary.csv, aggregated_metrics.csv)
+# usage: python src/evaluation/evaluate.py results/v1_mock_embedding.jsonl
+# outputs two files named after the results file (<name>_summary.csv, <name>_metrics.csv)
 
 import json
+import sys
+from pathlib import Path
 import pandas as pd
 from collections import defaultdict
 
@@ -52,9 +55,11 @@ def calc_prf(true_set: set, pred_set: set):
 
 def main():
     LABELS_PATH = "data/labels_v1.jsonl"        # Ground truth
-    RESULTS_PATH = "results/results.jsonl"        # Model output
-    OUTPUT_CSV = "results/evaluation_summary.csv"
-    AGG_CSV = "results/aggregated_metrics.csv"
+    # Model output: the results file given on the command line (default results/results.jsonl)
+    RESULTS_PATH = sys.argv[1] if len(sys.argv) > 1 else "results/results.jsonl"
+    name = Path(RESULTS_PATH).stem                  # e.g. v1_mock_embedding
+    OUTPUT_CSV = f"results/{name}_summary.csv"
+    AGG_CSV = f"results/{name}_metrics.csv"
 
     # load ground truth and model output 
     labels_raw = load_jsonl(LABELS_PATH)

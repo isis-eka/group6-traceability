@@ -47,10 +47,15 @@ For how the scripts and files fit together, and who owns each step, see the diag
 | 4 | `python src/build_index.py` | Splits each covered/not_covered copy's test files into one chunk per test function and embeds them into `data/index_v1/`. Run `--dry-run` first: it only writes the chunks to `workspace/_chunks/`, free. `--only <instance_id>` does one issue |
 | 5 | `python src/search_tests.py <instance_id> <covered\|not_covered> "<query>"` | Prints the 3 test functions most similar to the query, with scores |
 | 6 | `python src/run_v1.py` | Version 1: for each case in `data/cases.jsonl`, finds the 3 most similar tests and asks the AI once. Saves verdicts to `results/results.jsonl`. Add `--dry-run --limit 1` to see the prompt without calling the AI, or `--ollama` to test on a local Ollama model (qwen3:8b) instead of OpenAI |
+| 7 | `python src/evaluation/evaluate.py results/<run>.jsonl` | Scores one run against the answer key (`data/labels_v1.jsonl`). Writes `results/<run>_summary.csv` (one row per case) and `results/<run>_metrics.csv` (accuracy, false alarm and false all-clear rates, test precision/recall) |
+| 8 | `python src/evaluation/plot_metrics.py results/<run>_metrics.csv [...]` | Draws charts into `results/`. Give several `_metrics.csv` files to compare runs side by side |
 
 Example: `python src/prepare_repo.py psf__requests-2317`
 
-`run_v1.py` uses the embedding search from step 5 and the OpenAI model by default. Without an OpenAI key it falls back to keyword search (`src/search_bm25.py`) and a local Ollama model, and it uses keyword search for issues with no index yet. It prints a NOTE whenever it falls back, and each result records what was used. Use `--search search_bm25` or `--ollama` to choose these on purpose. More scripts (scoring) will be added in `src/`.
+`run_v1.py` uses the embedding search from step 5 and the OpenAI model by default. Without an OpenAI key it falls back to keyword search (`src/search_bm25.py`) and a local Ollama model, and it uses keyword search for issues with no index yet. It prints a NOTE whenever it falls back, and each result records what was used. Use `--search search_bm25` or `--ollama` to choose these on purpose.
+
+**Results file names:** `results/<version>_<run>_<search>.jsonl`, e.g. `v1_mock_embedding.jsonl` and `v1_mock_bm25.jsonl` (a trial run), later `v1_dev_embedding.jsonl` (the official dev-set run). Pass the name with `--out`:
+`python src/run_v1.py --search search_bm25 --out results/v1_mock_bm25.jsonl`. Scores and charts are named after the run.
 
 ## Version 1 dev set
 

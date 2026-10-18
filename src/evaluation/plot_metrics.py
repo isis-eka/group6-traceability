@@ -1,4 +1,9 @@
-# generates charts 
+# generates charts
+# usage: python src/evaluation/plot_metrics.py results/v1_mock_embedding_metrics.csv [more _metrics.csv ...]
+# several files are drawn side by side in one chart, to compare runs (e.g. embedding vs bm25)
+
+import sys
+from pathlib import Path
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,8 +12,10 @@ import matplotlib.pyplot as plt
 # bar chart 1: verdict accuracy vs false alarm rate 
 # Precision, Recall and F1 scores for retrieval 
 # saves the images into results folder 
-def plot_all(csv_path="results/aggregated_metrics.csv"):
-    df = pd.read_csv(csv_path)
+def plot_all(csv_paths):
+    df = pd.concat([pd.read_csv(p) for p in csv_paths], ignore_index=True)
+    # one file: name charts after its run; several: a comparison chart
+    name = Path(csv_paths[0]).stem.removesuffix("_metrics") if len(csv_paths) == 1 else "comparison"
     plt.rcParams["figure.figsize"] = (12,6)
 
     # Combine version + search strategy for readable x-axis labels
@@ -29,7 +36,7 @@ def plot_all(csv_path="results/aggregated_metrics.csv"):
     ax.set_ylabel("Score (0 to 1)")
     ax.set_title("Verdict Accuracy, False Alarm & False All-Clear Rate")
     ax.legend()
-    plt.savefig("results/accuracy_false_error_rates.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"results/{name}_accuracy.png", dpi=300, bbox_inches="tight")
     plt.close()
 
     # bar chart 2: Precision, Recall and F1 scores for retrieval
@@ -44,11 +51,13 @@ def plot_all(csv_path="results/aggregated_metrics.csv"):
     ax2.set_ylabel("Score (0 to 1)")
     ax2.set_title("Test Retrieval Precision / Recall / F1")
     ax2.legend()
-    plt.savefig("results/prf_metrics.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"results/{name}_prf.png", dpi=300, bbox_inches="tight")
     plt.close()
 
     print("✅ Side-by-side charts saved to results folder.")
 
 # Run plotting when this file is executed
 if __name__ == "__main__":
-    plot_all()
+    if len(sys.argv) < 2:
+        sys.exit("Usage: python src/evaluation/plot_metrics.py results/<run>_metrics.csv [...]")
+    plot_all(sys.argv[1:])
