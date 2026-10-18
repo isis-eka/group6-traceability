@@ -1,5 +1,6 @@
-# to make sure that there are no mistakes before running the evaluation scrpit 
-# checks for missing keys, rule validation and any duplicattions 
+# checks the answer key for mistakes before running the evaluation script
+# usage: python src/evaluation/sanity_check_labels.py
+# checks for missing keys, rule validation (covered needs tests, not_covered has none) and any duplicates
 
 import json
 from collections import Counter 

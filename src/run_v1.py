@@ -1,4 +1,9 @@
-"""Version 1: criterion -> top 3 similar tests -> one LLM call -> verdict saved.
+"""Version 1 of the tool: is each acceptance criterion tested?
+
+For each case, search finds the 3 tests most related to the criterion, then the AI reads
+the criterion and those tests once and answers covered, partial, not_covered or
+needs_review, with a short reason. The answers are saved for scoring.
+
 
 Run:    python src/run_v1.py                      # every case in data/cases.jsonl
         python src/run_v1.py --case psf__requests-1142__ac1__covered
@@ -9,7 +14,8 @@ Needs:  data/cases.jsonl, the case workspaces (src/prepare_repo.py), the embeddi
 Defaults: embedding search (search_tests) and the OpenAI model from .env. Fallbacks, each
         with a warning: no key or no index -> keyword search (search_bm25); no key -> local
         Ollama. Every result row records the search and model actually used.
-Output: results/results.jsonl  (one line per case; cases already run with the same
+Output: results/results.jsonl by default; use --out results/<split>/<round>/<search>.jsonl,
+        e.g. --out results/dev/v2/embedding.jsonl (one line per case; cases already run with the same
         version, model, prompt and search are skipped, so a failed run can be resumed)
 
 Never reads data/labels*.jsonl: scoring is a separate step.

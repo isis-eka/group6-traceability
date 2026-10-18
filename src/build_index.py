@@ -1,4 +1,9 @@
-"""Split each workspace copy's test files into one chunk per test function and embed them.
+"""Get the tests ready for meaning-based search (the embedding search in search_tests.py).
+
+For each code copy in workspace/, cut every test file into pieces, one per test function
+("chunks"), turn each piece into a list of numbers that captures its meaning ("embedding",
+made by OpenAI), and save them on this laptop. Identical tests share one embedding, so
+nothing is paid for twice.
 
 Run:    python src/build_index.py                 embed all issues in data/chosen_issues.json
         python src/build_index.py --dry-run       chunks only, no API calls (free)

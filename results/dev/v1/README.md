@@ -83,3 +83,16 @@ python src/evaluation/plot_metrics.py results/dev/v1/embedding_metrics.csv resul
 4. **Rerun** both searches with `verdict_v2` into `results/dev/v2/` (Gabriel), twice each to see how much answers vary, then
    decide the default search.
 5. **Test set:** freeze the prompt, then run once on the separate test issues for the reported results.
+6. **Shared search index in MongoDB Atlas** (Isis Eka, after the checkpoint): store the test
+   embeddings in MongoDB Atlas Vector Search instead of files on each laptop (`data/index_v1/`).
+   - **What stays the same:** tests are still turned into embeddings with OpenAI
+     (`text-embedding-3-small`), one per test function. Only where they are stored changes.
+   - **Why move:** every teammate currently has to run `build_index.py` to get their own copy of the
+     index before the embedding search works. A shared database means one index for the whole team,
+     and it scales to the test set and beyond.
+   - **Why Atlas and not OpenAI's vector store:** OpenAI's vector store cuts files into pieces by size,
+     not by test function, so a search result can't be mapped back to exactly one test name like the
+     answer key uses (decision 7). Atlas stores the records we give it: one per test, with its test
+     name, code and embedding.
+   - **Plan:** a separate free Atlas cluster for the project, connection string shared privately in each
+     member's `.env` (never on GitHub), and the local files kept as a fallback.

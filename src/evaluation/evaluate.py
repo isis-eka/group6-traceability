@@ -1,4 +1,9 @@
-# actual evaluation by comparing model predictions against the ground truth
+# scores one run: compares the AI's answers with the answer key (data/labels_v1.jsonl)
+# two things are scored for each case:
+#   - the verdict: was the AI's answer right? -> accuracy, false alarm rate
+#     (said not_covered when tests exist) and false all-clear rate (said covered when they don't)
+#   - the search: did the right tests reach the AI? -> precision, recall, F1 (covered cases only)
+# "gt_" columns are the answer key (ground truth), "pred_" columns are what our tool produced
 # usage: python src/evaluation/evaluate.py results/dev/v1/embedding.jsonl
 # outputs two files next to the results file (<name>_summary.csv, <name>_metrics.csv)
 

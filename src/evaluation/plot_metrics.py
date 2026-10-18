@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 # load aggregated metrics csv and draw bar chart
 # bar chart 1: verdict accuracy vs false alarm rate 
 # Precision, Recall and F1 scores for retrieval 
-# saves the images into results folder 
+# saves the images next to the first metrics file (see top of file)
 def plot_all(csv_paths):
     df = pd.concat([pd.read_csv(p) for p in csv_paths], ignore_index=True)
     out_dir = Path(csv_paths[0]).parent

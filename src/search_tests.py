@@ -1,4 +1,8 @@
-"""Find the test functions most similar in meaning to a query, in one workspace copy.
+"""
+This file searches the test file embeddings. 
+Given a requirement, it returns the tests in one code copy that are closest in meaning,
+even when they use different words. The requirement is turned into numbers the same way
+as the tests (see build_index.py), and the closest ones win.
 
 Run:    python src/search_tests.py psf__requests-1142 covered "GET requests send no Content-Length"
         python src/run_v1.py --search search_tests      (version 1 with this search)

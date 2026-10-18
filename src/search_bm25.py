@@ -1,6 +1,10 @@
-"""Keyword (BM25) search over a repo's test functions.
+"""
+Keyword (BM25) search over a repo's test functions.
 
-Stand-in for the embedding search until it is ready, and later the BM25 baseline.
+Given a requirement, it returns the tests that share the most words with it. BM25 is the
+standard formula for this: rare words (like "Content-Length") count more than common ones.
+It needs no API key or index, so it is the baseline we compare the embedding search
+(search_tests.py) against, and run_v1.py falls back to it when there is no key or index.
 Any search module used by run_v1.py must provide the same function:
 
     search_tests(workspace, criterion, k=3) -> [{"test_id", "file", "code", "score"}]
