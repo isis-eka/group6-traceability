@@ -242,3 +242,17 @@ Restructure results/ into results/<split>/<round>/ (dev or test, then prompt ver
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-18 · Take the answer key off GitHub again
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** data/labels_v1.jsonl (untracked)
+- **Outcome:** Kept
+
+### What I asked for
+Stop tracking data/labels_v1.jsonl again after it was re-uploaded through the GitHub website, keeping my local copy. data/labels*.jsonl was already in .gitignore.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
