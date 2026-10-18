@@ -237,13 +237,13 @@ kept changes
 - **Outcome:** Kept
 
 ### What I asked for
-Stop tracking data/labels_v1.jsonl again after it was re-uploaded through the GitHub website, keeping my local copy. data/labels*.jsonl was already in .gitignore.
+Stop tracking data/labels_v1.jsonl again after it was re-uploaded through the GitHub website by accident, keeping my local copy. data/labels*.jsonl was already in .gitignore.
 
 ### How I checked it
-[to fill by Isis Eka]
+verified in github website main branch that the file is not in the repository 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes. 
 
 ## 2026-10-18 · Try showing 5 tests instead of 3
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -254,7 +254,7 @@ Stop tracking data/labels_v1.jsonl again after it was re-uploaded through the Gi
 Run version 1 again on all 24 cases with embedding search, showing the AI 5 tests instead of 3 (--k 5), score it to compare with results/dev/v1, and write a short README for the folder.
 
 ### How I checked it
-[to fill by Isis Eka]
+viewed the results in results/dev/v1_k5/embedding_metrics.csv
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes. 
