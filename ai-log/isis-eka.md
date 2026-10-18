@@ -244,3 +244,17 @@ Stop tracking data/labels_v1.jsonl again after it was re-uploaded through the Gi
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-18 · Try showing 5 tests instead of 3
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** results/dev/v1_k5/embedding.jsonl, results/dev/v1_k5/embedding_metrics.csv, results/dev/v1_k5/README.md
+- **Outcome:** Kept
+
+### What I asked for
+Run version 1 again on all 24 cases with embedding search, showing the AI 5 tests instead of 3 (--k 5), score it to compare with results/dev/v1, and write a short README for the folder.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
