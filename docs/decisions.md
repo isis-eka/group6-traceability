@@ -53,3 +53,10 @@ tests (right answer: `covered`) and without them (right answer: `not_covered`). 
 tool can say "not covered", not just find tests. `partial` cases are added after the
 checkpoint. Tests are matched by pytest id at function level, ignoring parametrize `[...]`
 parts, because one search chunk is a whole test function.
+
+## 11. The code copies have no git history
+`prepare_repo.py` deletes the `.git` folder from every covered and not_covered copy, and the
+agent's tools may only read inside the current case's copy. Each copy was cloned with the
+project's full history, which includes the real fix and its tests: an agent that can `grep`
+or read files could find them there and score better than it really is. `workspace/_source/`
+keeps its history because the copies are cloned from it, so the agent must never read it.

@@ -272,3 +272,17 @@ ran the demo in my own terminal and verified demo output is as intended
 
 ### What I kept or changed
 kept changes 
+
+## 2026-10-20 · Remove git history from the code copies
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/prepare_repo.py, AGENTS.md, docs/decisions.md
+- **Outcome:** Kept
+
+### What I asked for
+Make prepare_repo.py delete each covered/not_covered copy's .git after applying the patches (and from copies that already exist), add --all to prepare every issue in data/chosen_issues.json on any OS, keep workspace/_source intact, add an AGENTS.md rule that agent tools only read inside the current case's folder, and add decision 11. Run it on my copies and check that no .git is left and the search results for psf__requests-1142 covered are unchanged.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

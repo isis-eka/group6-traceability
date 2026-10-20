@@ -11,6 +11,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 - **Never commit `.env`.** Keys live only in `.env` (copied from `.env.example`).
 - Default model: **`gpt-6-luna`** (override with `OPENAI_MODEL` in `.env`). `gpt-6.1-sol` is for the one final run only. Never GPT-4o.
 - Agent limits: **max 10 tool calls** per case, **read-only tools only** (`search_tests`, `grep`, `read_file`; no writes, no MCP, no coverage tracing), **max ~200 lines per file read**.
+- **Agent tools may only read inside the current case's workspace folder** (`workspace/<instance_id>/<variant>/`): never `.git`, `workspace/_source/`, another case's folder or anything outside `workspace/`. The copies have no git history (`prepare_repo.py` deletes it) because it contains the real fix and its tests.
 
 ## AI use disclosure (SE201 policy, required on every commit with AI-assisted work)
 - Add the trailer `Assisted-by: <tool> (<model>)` (e.g. `Assisted-by: Codex (gpt-6-luna)`). Your own `Co-Authored-By:` line also counts.
