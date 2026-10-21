@@ -1,0 +1,21 @@
+# Fails the push if an answer key is in the repo. .gitignore keeps them out of `git add`,
+# but not out of `git add -f` or GitHub's web upload, and test-set labels must never be public.
+name: Answer keys stay off GitHub
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No labels*.jsonl or *_summary.csv is tracked
+        run: |
+          found=$(git ls-files '*labels*.jsonl' '*_summary.csv')
+          if [ -n "$found" ]; then
+            echo "::error::Answer key files are in the repo. Remove them with 'git rm --cached <file>' and push again:"
+            echo "$found"
+            exit 1
+          fi

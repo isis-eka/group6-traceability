@@ -7,7 +7,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 ## Hard rules
 - **Never read `data/labels.jsonl` or `data/labels_v1.jsonl` or send them (or anything derived from them) to the model.** They are the answer key; only scoring code may open them. Never commit them (`data/labels*.jsonl` is git-ignored); they are shared privately.
 - **Acceptance criteria are drafted from issue text only** (`problem_statement`). Never use tests, `test_patch`, `patch`, `FAIL_TO_PASS` or issue comments when drafting or reviewing them.
-- **The acceptance criteria owner works only from issue-text files** (`data/issue_text.jsonl`; for version 1, `data/issue_text_v1.jsonl`). Never show them, or include in criteria-drafting prompts, any patch, test_patch, FAIL_TO_PASS or test file.
+- **The acceptance criteria owner works only from issue-text files** (`data/issue_text.jsonl`; for version 1, `data/issue_text_v1.jsonl`; for the test set, `data/issue_text_test.jsonl`). Never show them, or include in criteria-drafting prompts, any patch, test_patch, FAIL_TO_PASS or test file.
 - **Never commit `.env`.** Keys live only in `.env` (copied from `.env.example`).
 - Default model: **`gpt-6-luna`** (override with `OPENAI_MODEL` in `.env`). `gpt-6.1-sol` is for the one final run only. Never GPT-4o.
 - Agent limits: **max 10 tool calls** per case, **read-only tools only** (`search_tests`, `grep`, `read_file`; no writes, no MCP, no coverage tracing), **max ~200 lines per file read**.
@@ -23,7 +23,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 | Path | Contents |
 |---|---|
 | `prompts/` | Plain-text prompts: `draft_criteria.txt`, `verdict_v1.txt` (bump version for changes) |
-| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json` (issue ids and split only), `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key; git-ignored, shared privately), `index_v1/` (embedded test-function chunks, git-ignored, rebuilt by `build_index.py`) |
+| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json` (issue ids and split only), `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key; git-ignored, shared privately), `index_v1/` (embedded test-function chunks, git-ignored, rebuilt by `build_index.py`); test set (18 issues): `test_issues.json` (ids and split, from `src/pick_test_set.py`), `issue_text_test.jsonl` (criteria drafting input) |
 | `src/` | Python scripts; `src/evaluation/` holds the scoring scripts (`sanity_check_labels.py`, `evaluate.py`, `plot_metrics.py`; first drafts, still under review). Only scoring code may open the label files |
 | `results/` | `results.jsonl`, score tables, charts |
 | `workspace/` | Cloned requests/flask per case. Git-ignored, rebuilt by scripts |
@@ -35,7 +35,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 pip install -r requirements.txt
 cp .env.example .env        # then paste OPENAI_API_KEY
 python src/load_swebench.py                     # -> data/issues.jsonl (requests + flask only)
-python src/prepare_repo.py psf__requests-2317   # -> workspace/<id>/covered, workspace/<id>/not_covered
+python src/prepare_repo.py psf__requests-2317   # -> workspace/<id>/covered, workspace/<id>/not_covered (--all: dev set, --test: test set)
 python src/export_issue_text.py                 # -> data/issue_text.jsonl (instance_id + problem_statement only)
 python src/build_index.py --dry-run             # -> workspace/_chunks/ (chunks only, no API calls)
 python src/build_index.py                       # -> data/index_v1/<id>__<variant>.jsonl (one embedded chunk per test function)

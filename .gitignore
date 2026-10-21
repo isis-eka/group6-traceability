@@ -21,7 +21,7 @@ data/issues.jsonl
 data/issue_text.jsonl
 
 # Answer keys: never in git (Sammi and the model must not see them). Shared privately.
-data/labels*.jsonl
+**/labels*.jsonl
 
 # Embedded search index (rebuilt by src/build_index.py)
 data/index_v1/
