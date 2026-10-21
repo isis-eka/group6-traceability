@@ -11,7 +11,7 @@ For how the scripts and files fit together, and who owns each step, see the diag
 | Folder | What goes here | Who mainly works here |
 |---|---|---|
 | `prompts/` | Instructions we send to the AI (plain text) | Sammi |
-| `data/` | `issues.jsonl` (all 55 SWE-bench issues) and `issue_text.jsonl` (their text only): **not uploaded**, rebuilt by scripts. Version 1: `chosen_issues.json` (the 10 dev issues), `issue_text_v1.jsonl` (their text, for drafting criteria), `labels_v1.jsonl` (answer key: **not uploaded**, shared privately), `index_v1/` (test search index: **not uploaded**, rebuilt by `build_index.py`). Later: `cases.jsonl`, `labels.jsonl` | Isis Eka, Xiaoning |
+| `data/` | `issues.jsonl` (all 55 SWE-bench issues) and `issue_text.jsonl` (their text only): **not uploaded**, rebuilt by scripts. `chosen_issues.json` (every issue we use, each marked `"split": "dev"` (10) or `"test"` (18)), `issue_text_v1.jsonl` (their text, for drafting criteria), `labels_v1.jsonl` (answer key: **not uploaded**, shared privately), `index_v1/` (test search index: **not uploaded**, rebuilt by `build_index.py`). Test set: `issue_text_test.jsonl` (their text, for drafting criteria). Later: `cases.jsonl`, `labels.jsonl` | Isis Eka, Xiaoning |
 | `src/` | Python scripts | Gabriel, Isis Eka |
 | `results/` | One folder per round of runs: `dev/<round>/` (tuning on the dev issues) and later `test/final/` (the reported results). Each holds the AI's answers per search, scores, charts and a `README.md` write-up | Xiaoning, Gabriel |
 | `workspace/` | Downloaded copies of requests/flask. **Not uploaded to GitHub** | (created by scripts) |
@@ -42,9 +42,9 @@ For how the scripts and files fit together, and who owns each step, see the diag
 | Step | Command | What it does |
 |---|---|---|
 | 1 | `python src/load_swebench.py` | Downloads SWE-bench and saves the requests + flask issues to `data/issues.jsonl` |
-| 2 | `python src/prepare_repo.py <instance_id>` | Builds the **covered** and **not covered** versions of the code for one issue in `workspace/` |
-| 3 | `python src/export_issue_text.py` | Writes `data/issue_text.jsonl` with only `instance_id` and `problem_statement`, for all 55 issues. The acceptance criteria owner works only from issue-text files like this (for version 1: `issue_text_v1.jsonl`), never from `issues.jsonl` |
-| 4 | `python src/build_index.py` | Splits each covered/not_covered copy's test files into one chunk per test function and embeds them into `data/index_v1/`. Run `--dry-run` first: it only writes the chunks to `workspace/_chunks/`, free. `--only <instance_id>` does one issue |
+| 2 | `python src/prepare_repo.py <instance_id>` | Builds the **covered** and **not covered** versions of the code for one issue in `workspace/`. `--all` does every dev issue, `--test` every test-set issue (by `split` in `chosen_issues.json`) |
+| 3 | `python src/export_issue_text.py` | Writes `data/issue_text.jsonl` with only `instance_id` and `problem_statement`, for all 55 issues. The acceptance criteria owner works only from issue-text files like this (for version 1: `issue_text_v1.jsonl`; for the test set: `issue_text_test.jsonl`, made with `--split test --out data/issue_text_test.jsonl`), never from `issues.jsonl` |
+| 4 | `python src/build_index.py` | Splits each covered/not_covered copy's test files into one chunk per test function and embeds them into `data/index_v1/`. Run `--dry-run` first: it only writes the chunks to `workspace/_chunks/`, free. `--only <instance_id>` does one issue, `--test` the test set |
 | 5 | `python src/search_tests.py <instance_id> <covered\|not_covered> "<query>"` | Prints the 3 test functions most similar to the query, with scores |
 | 6 | `python src/run_v1.py` | Version 1: for each case in `data/cases.jsonl`, finds the 3 most similar tests and asks the AI once. Saves verdicts to `results/results.jsonl`. Add `--dry-run --limit 1` to see the prompt without calling the AI, or `--ollama` to test on a local Ollama model (qwen3:8b) instead of OpenAI |
 | 7 | `python src/evaluation/evaluate.py results/dev/v1/embedding.jsonl` | Scores one run against the answer key (`data/labels_v1.jsonl`). Writes `embedding_summary.csv` (one row per case; git-ignored, it lists the answer key tests) and `embedding_metrics.csv` (accuracy, false alarm and false all-clear rates, test precision/recall) next to it |
@@ -84,6 +84,10 @@ python src/demo.py psf__requests-5414__ac1__not_covered
 ## Version 1 dev set
 
 Version 1 runs on **10 dev issues**: 9 from `psf/requests` and 1 from `pallets/flask`, listed in `data/chosen_issues.json`. Each criterion is judged on a covered and a not_covered copy: 12 criteria, so 24 cases. We tune prompts on these, then freeze them. The reported results come from a separate test set of new issues.
+
+## Test set
+
+`python src/pick_test_set.py` adds the test set to `data/chosen_issues.json` as `"split": "test"` rows: every issue not in the dev set that passes the same check the dev issues did (every test in SWE-bench's `FAIL_TO_PASS` list appears in the fix's test patch). That is **18 issues**: 10 from `pallets/flask`, 8 from `psf/requests`. The other 27 list unrelated tests that fail for environment reasons, which would put wrong tests in the answer key. Nobody tunes on these issues, and their results are only looked at in the final runs.
 
 ## Test IDs
 

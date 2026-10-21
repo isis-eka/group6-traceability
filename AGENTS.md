@@ -23,7 +23,7 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 | Path | Contents |
 |---|---|
 | `prompts/` | Plain-text prompts: `draft_criteria.txt`, `verdict_v1.txt` (bump version for changes) |
-| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json` (issue ids and split only), `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key; git-ignored, shared privately), `index_v1/` (embedded test-function chunks, git-ignored, rebuilt by `build_index.py`); test set (18 issues): `test_issues.json` (ids and split, from `src/pick_test_set.py`), `issue_text_test.jsonl` (criteria drafting input) |
+| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json` (issue ids and split only: 10 `dev`, 18 `test`), `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key; git-ignored, shared privately), `index_v1/` (embedded test-function chunks, git-ignored, rebuilt by `build_index.py`); test set (18 issues, added to `chosen_issues.json` by `src/pick_test_set.py`): `issue_text_test.jsonl` (criteria drafting input) |
 | `src/` | Python scripts; `src/evaluation/` holds the scoring scripts (`sanity_check_labels.py`, `evaluate.py`, `plot_metrics.py`; first drafts, still under review). Only scoring code may open the label files |
 | `results/` | `results.jsonl`, score tables, charts |
 | `workspace/` | Cloned requests/flask per case. Git-ignored, rebuilt by scripts |

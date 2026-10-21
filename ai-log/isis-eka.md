@@ -286,3 +286,31 @@ Make prepare_repo.py delete each covered/not_covered copy's .git after applying 
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-21 · Keep test-set answer keys off GitHub
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** .gitignore, .github/workflows/answer-keys.yml
+- **Outcome:** Kept
+
+### What I asked for
+Change the ignore rule to **/labels*.jsonl so a labels file in any folder is ignored, and add a GitHub Actions check that fails a push if any answer key file is tracked.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
+
+## 2026-10-21 · Pick the test set and prepare its issue text and code copies
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/pick_test_set.py, src/export_issue_text.py, src/prepare_repo.py, src/build_index.py, data/chosen_issues.json, data/issue_text_test.jsonl, README.md, AGENTS.md, docs/decisions.md
+- **Outcome:** Kept
+
+### What I asked for
+Pick the test-set issues, export their issue text only for Sammi (issue_text_test.jsonl), and build their covered/not_covered copies. Only 18 of the 45 non-dev issues pass the dev set's check, so I chose to use just those 18 rather than hand-pick right tests for more. Then list them in data/chosen_issues.json as split "test" instead of a separate file, with every script filtering by split (--all = dev, --test = test).
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

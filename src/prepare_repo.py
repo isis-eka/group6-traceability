@@ -1,7 +1,8 @@
 """Build the 'covered' and 'not covered' versions of the code for one issue.
 
 Run:    python src/prepare_repo.py psf__requests-2317
-        python src/prepare_repo.py --all       # every issue in data/chosen_issues.json
+        python src/prepare_repo.py --all       # every dev issue in data/chosen_issues.json
+        python src/prepare_repo.py --test      # every test-set issue in data/chosen_issues.json
 Needs:  data/issues.jsonl (run src/load_swebench.py first) and git installed.
 Output: workspace/<instance_id>/covered/      code fix + its tests
         workspace/<instance_id>/not_covered/  code fix only (its tests left out)
@@ -75,10 +76,13 @@ def prepare(instance_id):
 
 def main():
     if len(sys.argv) != 2:
-        sys.exit("Usage: python src/prepare_repo.py <instance_id>  or  --all")
-    if sys.argv[1] == "--all":
+        sys.exit("Usage: python src/prepare_repo.py <instance_id>  or  --all  or  --test")
+    # --all is the dev set only, so nobody downloads the test set's tests by accident
+    splits = {"--all": "dev", "--test": "test"}
+    if sys.argv[1] in splits:
         for row in json.loads(CHOSEN.read_text(encoding="utf-8")):
-            prepare(row["instance_id"])
+            if row["split"] == splits[sys.argv[1]]:
+                prepare(row["instance_id"])
     else:
         prepare(sys.argv[1])
 

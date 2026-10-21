@@ -60,3 +60,12 @@ agent's tools may only read inside the current case's copy. Each copy was cloned
 project's full history, which includes the real fix and its tests: an agent that can `grep`
 or read files could find them there and score better than it really is. `workspace/_source/`
 keeps its history because the copies are cloned from it, so the agent must never read it.
+
+## 12. The test set is the 18 remaining issues that pass the dev set's check
+The dev issues were chosen because every test in SWE-bench's `FAIL_TO_PASS` list belongs to the
+fix. Of the other 45 requests and flask issues, 18 pass the same check (`src/pick_test_set.py`), so
+all 18 form the test set, with no random pick. They are listed in `chosen_issues.json` as
+`"split": "test"`; scripts take the dev set unless asked for `--test`. The other 27 also list
+unrelated tests that fail for environment reasons; keeping them would mean hand-picking their
+right tests. 18 is fewer than the 30 to 35 planned, so confidence intervals will be wider, and we
+report them by issue.

@@ -5,7 +5,8 @@ For each code copy in workspace/, cut every test file into pieces, one per test 
 made by OpenAI), and save them on this laptop. Identical tests share one embedding, so
 nothing is paid for twice.
 
-Run:    python src/build_index.py                 embed all issues in data/chosen_issues.json
+Run:    python src/build_index.py                 embed the dev issues in data/chosen_issues.json
+        python src/build_index.py --test          embed the test-set issues
         python src/build_index.py --dry-run       chunks only, no API calls (free)
         python src/build_index.py --only psf__requests-1142
 Needs:  workspace/<id>/covered and workspace/<id>/not_covered (run src/prepare_repo.py first),
@@ -106,13 +107,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--dry-run", action="store_true", help="build chunks only, no API calls")
     parser.add_argument("--only", metavar="INSTANCE_ID", help="index one issue")
+    parser.add_argument("--test", action="store_true", help="index the test-set issues instead of the dev ones")
     args = parser.parse_args()
 
-    ids = [c["instance_id"] for c in json.loads(CHOSEN.read_text())]
+    chosen = json.loads(CHOSEN.read_text())
     if args.only:
-        if args.only not in ids:
+        if args.only not in {c["instance_id"] for c in chosen}:
             sys.exit(f"{args.only} is not in {CHOSEN}")
         ids = [args.only]
+    else:
+        split = "test" if args.test else "dev"
+        ids = [c["instance_id"] for c in chosen if c["split"] == split]
 
     folders = [(i, v, WORKSPACE / i / v) for i in ids for v in VARIANTS]
     missing = [str(f) for _, _, f in folders if not f.is_dir()]
