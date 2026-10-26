@@ -154,8 +154,13 @@ def ask_model(client, model, prompt, json_mode=True):
             time.sleep(5 * (attempt + 1))
 
 
-def main():
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+def default_build(template, case, hits):
+    """(prompt, extra fields for the result row). run_v2.py passes its own."""
+    return build_prompt(template, case["criterion"], hits), {}
+
+
+def main(version=VERSION, build=default_build, doc=__doc__):
+    p = argparse.ArgumentParser(description=doc, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--cases", default="data/cases.jsonl")
     p.add_argument("--out", default="results/results.jsonl")
     p.add_argument("--prompt", default="verdict_v1", help="file name in prompts/, without .txt")
@@ -178,7 +183,7 @@ def main():
     model, use_ollama = choose_model(args.ollama)
 
     out = Path(args.out)
-    run = {"version": VERSION, "model": model, "prompt": args.prompt, "search": search_name}
+    run = {"version": version, "model": model, "prompt": args.prompt, "search": search_name}
     done = set()
     if out.exists() and not args.dry_run:
         with out.open(encoding="utf-8") as f:
@@ -201,7 +206,7 @@ def main():
             print(f"skip (no workspace, run prepare_repo.py): {case['workspace']}", file=sys.stderr)
             continue
         hits = search(case, args.k)
-        prompt = build_prompt(template, case["criterion"], hits)
+        prompt, extra = build(template, case, hits)
         if args.dry_run:
             print(f"===== {case['case_id']}\n{prompt}\n")
             continue
@@ -214,6 +219,7 @@ def main():
             "reason": reason,
             "tests_found": [h["test_id"] for h in hits],
             "tests_used": tests_used,
+            **extra,
             **run,
             "tool_calls": 0,
             "tokens_in": usage.prompt_tokens,

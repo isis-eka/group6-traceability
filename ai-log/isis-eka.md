@@ -314,3 +314,17 @@ Pick the test-set issues, export their issue text only for Sammi (issue_text_tes
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-10-22 · Version 2: add the code the tests call
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/run_v2.py, src/run_v1.py, README.md, AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+Write the Version 2 script: like run_v1, but for each retrieved test find the functions it calls and add their code to the prompt. run_v2.py finds called names in the 3 tests, looks up their definitions in the case folder's own source code (one level deep, at most 250 lines), and reuses run_v1's search, model, saving and resume through a small hook in run_v1.main, which leaves run_v1's prompts unchanged.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]

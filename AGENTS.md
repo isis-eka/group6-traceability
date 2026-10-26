@@ -43,6 +43,7 @@ python src/search_tests.py psf__requests-1142 covered "<query>"   # top 3 test_i
 python src/run_v1.py --dry-run --limit 1        # print one verdict prompt, no API call
 python src/run_v1.py                            # data/cases.jsonl -> results/results.jsonl (version 1)
 python src/run_v1.py --ollama                   # same, verdicts on local Ollama qwen3:8b (testing only)
+python src/run_v2.py --dry-run --limit 1        # version 2: v1 + the code the found tests call (same options as run_v1)
 ```
 `covered` = base commit + code fix + its tests; `not_covered` = base commit + code fix only.
 Scripts are run from the repo root. `run_v1.py` defaults to the embedding search (`src/search_tests.py`)
