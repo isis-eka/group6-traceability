@@ -1,15 +1,9 @@
-# scores one run: compares the AI's answers with the answer key (data/labels_v1.jsonl)
-# two things are scored for each case:
-#   - the verdict: was the AI's answer right? -> accuracy, false alarm rate
-#     (said not_covered when tests exist) and false all-clear rate (said covered when they don't)
-#   - the search: did the right tests reach the AI? -> precision, recall, F1 (covered cases only)
-# "gt_" columns are the answer key (ground truth), "pred_" columns are what our tool produced
-# usage: python src/evaluation/evaluate.py results/dev/v1/embedding.jsonl
-# outputs two files next to the results file (<name>_summary.csv, <name>_metrics.csv)
+# actual evaluation by comparing model predictions against the ground truth
+# outputs two files (evaluation_summary.csv, aggregated_metrics.csv)
 
+import os
 import json
-import sys
-from pathlib import Path
+import re
 import pandas as pd
 from collections import defaultdict
 
@@ -31,16 +25,16 @@ def normalize_test_name(test_name: str) -> str:
     """
     return test_name.split("[")[0]
 
+# ensure that ac1 and ac2 (acN) can be distinguished 
+# remove the label suffixes (covered, not_covered, partial) while preserving the acceptance criterion (ac1, ac2...)
+# preserves __acN, which is important because we are labelling test coverage for each acceptance criterion, rather than only for each issue
+def normalize_case_id(case_id):
+    case_id = case_id.strip()
 
-def normalize_case_id(case_id: str) -> str:
-    """
-    Fix: normalize result case_id to match ground truth
-    psf__requests-1142__ac1__covered → psf__requests-1142-covered
-    """
-    parts = case_id.split("__")
-    repo_bug = parts[0] + "__" + parts[1]
-    verdict_suffix = parts[-1]
-    return f"{repo_bug}-{verdict_suffix}"
+    case_id = re.sub(
+        r"__(covered|not_covered|partial)$", "", case_id)
+
+    return case_id
 
 # calculate Precision, Recall F1 for retrieved test names
 # true_set: real list of tests (ground truth)
@@ -60,11 +54,9 @@ def calc_prf(true_set: set, pred_set: set):
 
 def main():
     LABELS_PATH = "data/labels_v1.jsonl"        # Ground truth
-    # Model output: the results file given on the command line (default results/results.jsonl)
-    RESULTS_PATH = sys.argv[1] if len(sys.argv) > 1 else "results/results.jsonl"
-    run = Path(RESULTS_PATH)                        # e.g. results/dev/v1/embedding.jsonl
-    OUTPUT_CSV = run.with_name(f"{run.stem}_summary.csv")
-    AGG_CSV = run.with_name(f"{run.stem}_metrics.csv")
+    RESULTS_PATH = "data/results.jsonl"         # Model output
+    OUTPUT_CSV = "results/evaluation_summary.csv"
+    AGG_CSV = "results/aggregated_metrics.csv"
 
     # load ground truth and model output 
     labels_raw = load_jsonl(LABELS_PATH)
@@ -72,7 +64,7 @@ def main():
 
     # convert ground truth list into a dictionary: case_id to ground truth entry 
     gt_map = {r["case_id"]: r for r in labels_raw}
-
+    
     # track aggregate metics for each model version
     rows = []
     per_group = defaultdict(lambda: {
@@ -80,7 +72,6 @@ def main():
         "verdict_correct":0,
         "needs_review":0,
         "false_alarm":0,
-        "false_all_clear":0,
         "sum_prec":0.0,
         "sum_rec":0.0,
         "sum_f1":0.0,
@@ -107,8 +98,8 @@ def main():
         verdict_ok = 1 if pred_v == gt_v else 0
         # count cases where model output "needs_review"
         need_review = 1 if pred_v == "needs_review" else 0
-        # false alarm: model says not covered, but ground truth has tests
-        false_alarm = 1 if (pred_v == "not_covered" and len(gt["tests"])>0) else 0
+        # model predicting not_covered when the ground truth says covered
+        false_alarm = 1 if (pred_v == "not_covered" and gt_v == "covered") else 0
         false_all_clear = 1 if (pred_v == "covered" and gt_v == "not_covered") else 0
 
         # compute test retrieval metrics 
@@ -176,16 +167,26 @@ def main():
         nr_rate = data["needs_review"] / total              # percentage of cases marked as "needs_review"
         fa_rate = data["false_alarm"] / total               # false alarm rate
         fac_rate = data["false_all_clear"] / total          # false all clear rate
-        avg_p = data["sum_prec"] / data["prf_count"]        # avg precision 
-        avg_r = data["sum_rec"] / data["prf_count"]         # avg recall 
-        avg_f = data["sum_f1"] / data["prf_count"]          # avg F1
+        # prevents the evaluation from crashing when no cases have ground-truth tests
+        # pandas will write missing averages as blank values in CSV
+        if data["prf_count"] > 0:
+            avg_p = data["sum_prec"] / data["prf_count"]
+            avg_r = data["sum_rec"] / data["prf_count"]
+            avg_f = data["sum_f1"] / data["prf_count"]
+        else:
+            avg_p = None
+            avg_r = None
+            avg_f = None
         print(f"\nVersion {ver}, Search Strategy: {search_strategy}")
         print(f"Total cases: {total}")
         print(f"Verdict Accuracy: {acc:.3f}")
         print(f"Needs Review Rate: {nr_rate:.3f}")
         print(f"False Alarm Rate: {fa_rate:.3f}")
         print(f"False All Clear Rate: {fac_rate:.3f}")
-        print(f"Avg Precision: {avg_p:.3f}, Recall: {avg_r:.3f}, F1: {avg_f:.3f}")
+        if avg_p is not None:
+            print(f"Avg Precision: {avg_p:.3f}, " f"Recall: {avg_r:.3f}, F1: {avg_f:.3f}")
+        else:
+            print("Avg Precision, Recall, F1: N/A")
         agg_rows.append({
             "version":ver,
             "search_strategy":search_strategy,
