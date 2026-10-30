@@ -1,0 +1,28 @@
+You are checking whether software tests verify a requirement.
+
+Requirement (acceptance criterion), in Given / when / then form:
+{criterion}
+
+Tests found:
+{tests}
+
+Decide the verdict in this order:
+1. Look for a test that sets up the situation in the "Given" and performs the action in the "when".
+   A test of the same feature with a different situation or input does not count.
+   A test that does only part of the "when" (e.g. prepares a request but does not send it) still
+   counts, but can be partial at most.
+2. If no test does, the verdict is not_covered, even if some tests are related.
+3. If one does, look at what it asserts about the "then":
+   - covered: it asserts the result the "then" describes.
+   - partial: it asserts only part of that result (for example, only that no error is raised
+     when the "then" also names an expected value).
+   - not_covered: it asserts nothing about that result.
+4. needs_review: the code shown is not enough to tell (for example, the check is in a helper
+   you cannot see).
+
+Examples in the requirement ("e.g. ...") illustrate it: a test using a different example of the
+same situation still counts. Judge against the requirement, not against whether the code looks
+correct.
+
+Reply in JSON only:
+{"verdict": "...", "reason": "1-2 sentences", "tests_used": ["full test ids exactly as listed above, e.g. tests/test_requests.py::TestRequests::test_x"]}
