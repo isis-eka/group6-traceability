@@ -38,10 +38,10 @@ criteria review, not loosened in the prompt, to avoid false all-clears. Compare 
 section by section before creating the file.
 
 ### How I checked it
-[to fill by Sammi Chua]
+Read the v1 vs v2 comparison properly. Read all of verdict_v2.txt before approving.
 
 ### What I kept or changed
-[to fill by Sammi Chua]
+Kept the draft unchanged, because I wasn't sure what to change. Left problem B out of the prompt, as the AI proposed. I'm not sure yet whether that's right. I want to see v2's real results first.
 
 ## 2026-10-30 · Refine verdict prompt version 2
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -58,7 +58,9 @@ the prompt on purpose: 1635 ac1 (search never finds the test), 1537 ac2 (float v
 criteria/answer-key question for Xiaoning) and 4106 (a fix would overfit one dev case).
 
 ### How I checked it
-[to fill by Sammi Chua]
+Read and understood the two new lines before approving them. Applied v2 by hand to 4 cases, using only the AI's v1 reasons, not the test files. This was after the fixes were made.
+Matched the AI's prediction on 1142 and 1635 ac2.
+Differed on 3718 (me partial, AI not_covered) and 4106 (me not_covered, AI partial). Read the 24-case table, and the rest looked fine. 
 
 ### What I kept or changed
-[to fill by Sammi Chua]
+Accepted both fixes, because the 1142 and 2931 examples convinced me.
