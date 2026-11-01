@@ -53,17 +53,24 @@ def calc_prf(true_set: set, pred_set: set):
     return precision, recall, f1, tp, fp, fn
 
 def main():
-    LABELS_PATH = "data/labels_v1.jsonl"        # Ground truth
-    RESULTS_PATH = "data/results.jsonl"         # Model output
+    LABELS_PATH = "data/labels_v1.jsonl"
+    RESULTS_PATH = "results/dev/v1/bm25.jsonl"
     OUTPUT_CSV = "results/evaluation_summary.csv"
     AGG_CSV = "results/aggregated_metrics.csv"
+
+    # Create results folder if it doesn't exist
+    os.makedirs("results", exist_ok=True)
+
+    # Load ground truth and model output
+    labels_raw = load_jsonl(LABELS_PATH)
+    results_raw = load_jsonl(RESULTS_PATH)
 
     # load ground truth and model output 
     labels_raw = load_jsonl(LABELS_PATH)
     results_raw = load_jsonl(RESULTS_PATH)
 
     # convert ground truth list into a dictionary: case_id to ground truth entry 
-    gt_map = {r["case_id"]: r for r in labels_raw}
+    gt_map = { normalize_case_id(r["case_id"]): r for r in labels_raw}
     
     # track aggregate metics for each model version
     rows = []
