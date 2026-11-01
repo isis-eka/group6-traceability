@@ -79,3 +79,12 @@ lines, `grep` at most 40 matches and `search_tests` 3 tests. Owning the loop kee
 visible in one file and adds no dependency. It uses the Responses API because, on Chat
 Completions, `gpt-6-luna` accepts tools only with reasoning switched off, which would make
 version 3 reason less than versions 1 and 2 and confuse the comparison.
+
+## 14. The no-retrieval baseline must pick a verdict and sees the criterion only
+`python src/run_v1.py --search none --prompt no_retrieval_v1` gives the AI the criterion with no
+tests or code. It must choose covered, partial or not_covered (no needs_review), so it cannot
+score well by passing every case to a person. It checks two things: that versions 1-3 gain from
+what they are shown, and memorisation (requests and flask are public). The covered and
+not_covered copies of a criterion get the same prompt, so on those pairs about 50% is the
+ceiling; only scores well above that suggest memorisation. On the dev set it answered covered
+23 times out of 24.

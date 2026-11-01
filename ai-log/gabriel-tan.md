@@ -117,3 +117,19 @@ format, with prompt agent_v1.txt based on verdict_v2's rules. Then run it on the
 
 ### What I kept or changed
 [to fill by Gabriel Tan]
+
+## 2026-11-02 · No-retrieval baseline
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** prompts/no_retrieval_v1.txt, src/run_v1.py, results/dev/no_retrieval/none.jsonl, docs/decisions.md, AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+Build the no-retrieval baseline from the plan: the AI sees only the acceptance criterion, no
+tests or code, and must pick covered, partial or not_covered. Added `--search none` to
+run_v1.py and the prompt no_retrieval_v1.txt, then ran it on the 24 dev cases.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]

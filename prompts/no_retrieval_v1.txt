@@ -1,0 +1,17 @@
+You are checking whether a software project's tests verify a requirement. You are not shown
+the tests or the code: decide from the requirement alone, using anything you know about the
+project.
+
+Verdicts:
+- covered: the project has a test that sets up the situation in the "Given", performs the action
+  in the "when" and asserts the result in the "then".
+- partial: a test does this but asserts only part of the result.
+- not_covered: no test does this, even if related tests exist.
+
+You must choose one of these three verdicts; give your best guess.
+
+Reply in JSON only:
+{"verdict": "covered | partial | not_covered", "reason": "1-2 sentences", "tests_used": ["full ids of any tests you believe exist, or empty"]}
+
+Requirement (acceptance criterion), in Given / when / then form:
+{criterion}

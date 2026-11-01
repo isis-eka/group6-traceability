@@ -9,6 +9,7 @@ Run:    python src/run_v1.py                      # every case in data/cases.jso
         python src/run_v1.py --case psf__requests-1142__ac1__covered
         python src/run_v1.py --dry-run --limit 1  # print the prompt, no API call
         python src/run_v1.py --ollama             # local Ollama, qwen3:8b (or --ollama <model>)
+        python src/run_v1.py --search none --prompt no_retrieval_v1   # no-retrieval baseline
 Needs:  data/cases.jsonl, the case workspaces (src/prepare_repo.py), the embedding index
         (src/build_index.py) and .env with OPENAI_API_KEY.
 Defaults: embedding search (search_tests) and the OpenAI model from .env. Fallbacks, each
@@ -61,6 +62,8 @@ def load_search(name):
     search_tests.py (embedding index) is keyed by issue and variant; search_bm25.py and any
     other module by workspace folder. Both return [{"test_id", ..., "code" or "text"}].
     """
+    if name == "none":  # no-retrieval baseline: the AI sees the criterion only
+        return lambda case, k: []
     sys.path.insert(0, str(SRC))
     search_tests = importlib.import_module(name).search_tests
     if list(inspect.signature(search_tests).parameters)[:2] == ["instance_id", "variant"]:
@@ -166,7 +169,8 @@ def main(version=VERSION, build=default_build, doc=__doc__):
     p.add_argument("--prompt", default="verdict_v1", help="file name in prompts/, without .txt")
     p.add_argument("--search", default="search_tests",
                    help="search module in src/: search_tests (embedding index, default; falls back "
-                        "to search_bm25 without an OpenAI key or index) or search_bm25 (keyword)")
+                        "to search_bm25 without an OpenAI key or index) or search_bm25 (keyword); "
+                        "none for the no-retrieval baseline (use with --prompt no_retrieval_v1)")
     p.add_argument("--k", type=int, default=3)
     p.add_argument("--case", action="append", help="run only this case_id (repeatable)")
     p.add_argument("--limit", type=int)
