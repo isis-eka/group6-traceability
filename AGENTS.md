@@ -46,6 +46,7 @@ python src/run_v1.py --ollama                   # same, verdicts on local Ollama
 python src/run_v2.py --dry-run --limit 1        # version 2: v1 + the code the found tests call (same options as run_v1)
 python src/run_agent.py --case <case_id> --verbose  # version 3: agent with search_tests/grep/read_file, max 10 calls (same options)
 python src/run_v1.py --search none --prompt no_retrieval_v1   # no-retrieval baseline: criterion only, no tests
+python src/trace.py --repo <github link or folder> --issue <issue link, number or file>   # the end-user tool: report in reports/
 ```
 `covered` = base commit + code fix + its tests; `not_covered` = base commit + code fix only.
 Scripts are run from the repo root. `run_v1.py` defaults to the embedding search (`src/search_tests.py`)

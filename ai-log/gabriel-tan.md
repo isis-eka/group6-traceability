@@ -133,3 +133,21 @@ run_v1.py and the prompt no_retrieval_v1.txt, then ran it on the 24 dev cases.
 
 ### What I kept or changed
 [to fill by Gabriel Tan]
+
+## 2026-11-02 · End-user command trace.py (repo link + issue -> traceability report)
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/trace.py, README.md, docs/decisions.md, AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+An end-user command so the tool works on any project, not only our prepared SWE-bench copies.
+It takes a GitHub repo link or a local folder, and a GitHub issue (link or number), a text file
+or typed criteria. It drafts acceptance criteria from the issue text, runs the agent on each one
+and writes a Markdown traceability report (verdict, tests cited, reason, summary, next step).
+Also a README section with runnable examples.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]

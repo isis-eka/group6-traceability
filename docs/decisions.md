@@ -88,3 +88,15 @@ what they are shown, and memorisation (requests and flask are public). The cover
 not_covered copies of a criterion get the same prompt, so on those pairs about 50% is the
 ceiling; only scores well above that suggest memorisation. On the dev set it answered covered
 23 times out of 24.
+
+## 15. One end-user command, `src/trace.py`, separate from the evaluation
+The evaluation scripts only run on prepared SWE-bench copies, so a team could not use the tool
+on its own project. `trace.py` takes a GitHub repo link (cloned shallow into `workspace/_trace/`)
+or a local folder, plus a GitHub issue (link or number) or a text file, or criteria typed in. It
+drafts criteria with `prompts/draft_criteria.txt` when none are given, runs the agent (version 3,
+same prompt and limits) on each, and writes a Markdown traceability report to `reports/`. It
+reuses the evaluation code without changing it, never reads `data/`, and writes nothing to
+`results/`, so the scores are unaffected. The agent is still confined to the one repo folder and
+kept out of `.git`. A local folder can sit outside `workspace/`, since reading the user's own repo
+is the point; the `workspace/` rule protects the evaluation copies. Only the issue title and body
+are downloaded, never comments, as for criteria drafting in the evaluation.
