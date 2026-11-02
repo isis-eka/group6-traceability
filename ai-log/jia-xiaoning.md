@@ -25,3 +25,25 @@ I made deliberate mistakes to the ground truth file such that I would run into a
 
 ### What I kept or changed
 Kept the main structure of my code for the evaluation, but added in the src/evaluation/sanity_check_labels.py just to be extra safe. Also added the extra portion on the bar graphs for visuals.  
+
+## 2026-11-01 · Checking for evaluate.py
+- **Tool (model):** Doubao (2.31.4_win)
+- **Files:** src\evaluation\evaluate.py, comments from group mates
+- **Outcome:** Changed
+
+### What I asked for
+Asked to check for any holes in the code outline. Model replied that it was fine but just to change parts on evaluation results. 
+
+### How I checked it
+Ran the code again to check for differences.
+
+### What I kept or changed
+I changed 
+OUTPUT_CSV = "results/evaluation_summary.csv"
+AGG_CSV = "results/aggregated_metrics.csv"
+to 
+file_name = os.path.splitext(os.path.basename(RESULTS_PATH))[0]
+OUTPUT_CSV = f"results/{file_name}_evaluation_summary.csv"
+AGG_CSV = f"results/{file_name}_aggregated_metrics.csv"
+
+to prevent the evaluation from being overwritten every time I run the evaluator in order to comapre V1, V2, V3 and no-retrieval baseline better. 
