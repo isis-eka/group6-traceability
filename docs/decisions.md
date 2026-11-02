@@ -9,7 +9,8 @@ comes with a real fix and real tests, which gives us ground truth for free; a ha
 repo would be easy to bias toward our own tool and would not be credible as evidence.
 
 ## 2. Three versions compared against the same answer key
-We build three versions of the tool and score all of them against one shared `labels.jsonl`.
+We build three versions of the tool and score all of them against one shared answer key
+(`labels_dev.jsonl` for the dev set, see decision 16).
 Using a single fixed answer key means differences in scores come from the versions
 themselves, not from changes in labelling.
 
@@ -88,3 +89,20 @@ what they are shown, and memorisation (requests and flask are public). The cover
 not_covered copies of a criterion get the same prompt, so on those pairs about 50% is the
 ceiling; only scores well above that suggest memorisation. On the dev set it answered covered
 23 times out of 24.
+
+## 15. Version 2 adds the code the found tests call, picked by a fixed script
+`src/run_v2.py` is version 1 plus, under each retrieved test, the definitions of the functions and
+classes that test calls in the project's own source (one level deep, no test files or vendored
+code; at most 2 definitions per name, 60 lines each, 250 lines in all). A fixed script, not the
+AI, decides what is shown, so comparing version 2 with the agent (version 3) separates "seeing
+more code" from "choosing what to read". The cap keeps prompts at about 1,750 tokens against about
+570 for version 1.
+
+## 16. The answer key has one row per criterion and copy
+`labels_v1.jsonl` gave one verdict per issue and copy (`psf__requests-1142-covered`), which cannot
+say which criterion is covered when an issue has two, and cannot hold a `partial` criterion next
+to a `covered` one. `data/labels_dev.jsonl` replaces it with one row per case in `cases.jsonl`
+(`psf__requests-1142__ac1__covered`), with `verdict`, `tests` and `note` (schema in `AGENTS.md`);
+`evaluate.py` matches results on the full case id. Like every answer key it stays off GitHub
+(decision 9): labelling notes go in the git-ignored `answer_keys/` folder or stay on the
+labeller's machine.
