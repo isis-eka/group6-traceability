@@ -6,6 +6,7 @@ import json
 import re
 import pandas as pd
 from collections import defaultdict
+import argparse
 
 # read the file, return list of dictionaries
 def load_jsonl(filepath: str):
@@ -25,17 +26,6 @@ def normalize_test_name(test_name: str) -> str:
     """
     return test_name.split("[")[0]
 
-# ensure that ac1 and ac2 (acN) can be distinguished 
-# remove the label suffixes (covered, not_covered, partial) while preserving the acceptance criterion (ac1, ac2...)
-# preserves __acN, which is important because we are labelling test coverage for each acceptance criterion, rather than only for each issue
-def normalize_case_id(case_id):
-    case_id = case_id.strip()
-
-    case_id = re.sub(
-        r"__(covered|not_covered|partial)$", "", case_id)
-
-    return case_id
-
 # calculate Precision, Recall F1 for retrieved test names
 # true_set: real list of tests (ground truth)
 # pred_set: tests found by your model 
@@ -53,24 +43,30 @@ def calc_prf(true_set: set, pred_set: set):
     return precision, recall, f1, tp, fp, fn
 
 def main():
-    LABELS_PATH = "data/labels_v1.jsonl"
-    RESULTS_PATH = "results/dev/v1/bm25.jsonl"
-    OUTPUT_CSV = "results/evaluation_summary.csv"
-    AGG_CSV = "results/aggregated_metrics.csv"
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "results_file",
+        help="Path to the model predictions JSONL file"
+    )
+
+    args = parser.parse_args()
+
+    LABELS_PATH = "data/labels_dev.jsonl"
+    RESULTS_PATH = args.results_file
+    # use the results filename to create unique output filenames
+    file_name = os.path.splitext(os.path.basename(RESULTS_PATH))[0]
+    OUTPUT_CSV = f"results/{file_name}_evaluation_summary.csv"
+    AGG_CSV = f"results/{file_name}_aggregated_metrics.csv"
 
     # Create results folder if it doesn't exist
     os.makedirs("results", exist_ok=True)
-
-    # Load ground truth and model output
-    labels_raw = load_jsonl(LABELS_PATH)
-    results_raw = load_jsonl(RESULTS_PATH)
 
     # load ground truth and model output 
     labels_raw = load_jsonl(LABELS_PATH)
     results_raw = load_jsonl(RESULTS_PATH)
 
     # convert ground truth list into a dictionary: case_id to ground truth entry 
-    gt_map = { normalize_case_id(r["case_id"]): r for r in labels_raw}
+    gt_map = {r["case_id"]: r for r in labels_raw}
     
     # track aggregate metics for each model version
     rows = []
@@ -79,6 +75,7 @@ def main():
         "verdict_correct":0,
         "needs_review":0,
         "false_alarm":0,
+        "false_all_clear": 0,
         "sum_prec":0.0,
         "sum_rec":0.0,
         "sum_f1":0.0,
@@ -88,10 +85,10 @@ def main():
     # loop through every prediction made by the model 
     for res in results_raw:
         raw_result_cid = res["case_id"]
-        norm_cid = normalize_case_id(raw_result_cid)
+        norm_cid = raw_result_cid
 
         if norm_cid not in gt_map:
-            print(f"WARNING: normalized case {norm_cid} (original={raw_result_cid}) missing from ground truth labels, skipping")
+            print(f"WARNING: case {raw_result_cid} missing from ground truth labels, skipping")
             continue
 
         gt = gt_map[norm_cid]
@@ -123,7 +120,7 @@ def main():
         # save the case data for csv
         rows.append({
             "case_id":raw_result_cid,
-            "normalized_case_id":norm_cid,
+            "matched_case_id":norm_cid,
             "search":search_strategy,
             "version":ver,
             "gt_verdict":gt_v,
