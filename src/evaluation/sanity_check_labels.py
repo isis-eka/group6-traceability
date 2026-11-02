@@ -1,64 +1,102 @@
-# checks the answer key for mistakes before running the evaluation script
-# usage: python src/evaluation/sanity_check_labels.py
-# checks for missing keys, rule validation (covered needs tests, not_covered has none) and any duplicates
 
 import json
-from collections import Counter 
+from collections import Counter
 
-# read the file, converts each line into dictionary 
+# Read the JSONL file
 def load_jsonl(path):
-    recs = []
-    with open(path, "r", encoding = "utf-8") as f:
+    records = []
+
+    with open(path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
+
             if not line:
                 continue
-            recs.append(json.loads(line))
-    return recs
 
-# validation for ground truth labels
-# checks: every entry has required keys (case_id, verdict, tests), verdict and tests are logically consistent, no duplicate case_ids
+            records.append(json.loads(line))
+
+    return records
+
+
+# Check the ground-truth labels
 def sanity_check_labels(labels_path):
     labels = load_jsonl(labels_path)
+
     case_ids = []
     errors = []
     verdict_counter = Counter()
 
-# loop through every ground truth entry to run checks 
     for idx, item in enumerate(labels):
-        # Check required keys
-        for required_key in ["case_id", "verdict", "tests"]:
-            if required_key not in item:
-                errors.append(f"Line {idx}: missing key '{required_key}'")
+
+        # Check required keys first
+        required_keys = ["case_id", "verdict", "tests"]
+
+        missing_keys = []
+
+        for key in required_keys:
+            if key not in item:
+                missing_keys.append(key)
+
+        if missing_keys:
+            errors.append(
+                f"Line {idx + 1}: missing keys {missing_keys}"
+            )
+            continue
 
         cid = item["case_id"]
-        case_ids.append(cid)
-        v = item["verdict"]
-        verdict_counter[v] += 1
+        verdict = item["verdict"]
         tests = item["tests"]
 
-        # Validate verdict and tests consistency
-        if v == "covered" and len(tests) == 0:
-            errors.append(f"{cid}: verdict=covered but tests list is empty!")
-        if v == "not_covered" and len(tests) > 0:
-            errors.append(f"{cid}: verdict=not_covered but tests are present!")
+        # Check data types
+        if not isinstance(cid, str) or not isinstance(verdict, str):
+            errors.append(f"Line {idx + 1}: case_id and verdict must be strings")
+            continue
 
-    # Check duplicate case_id
-    dupes = [cid for cid, count in Counter(case_ids).items() if count > 1]
-    if dupes:
-        errors.append(f"Duplicate case_ids found: {dupes}")
+        if not isinstance(tests, list):
+            errors.append(f"{cid}: tests must be a list")
+            continue
 
-    #print report
+        case_ids.append(cid)
+        verdict_counter[verdict] += 1
+
+        # Check valid verdicts
+        if verdict not in ["covered", "not_covered", "partial"]:
+            errors.append(f"{cid}: invalid verdict '{verdict}'")
+            continue
+
+        # Check verdict and tests consistency
+        if verdict == "covered" and len(tests) == 0:
+            errors.append(f"{cid}: covered but no tests are listed")
+
+        if verdict == "not_covered" and len(tests) > 0:
+            errors.append(f"{cid}: not_covered but tests are listed")
+
+        if verdict == "partial" and len(tests) == 0:
+            errors.append(f"{cid}: partial but no relevant tests are listed")
+
+    # Check duplicate case IDs
+    duplicates = [
+        cid for cid, count in Counter(case_ids).items()
+        if count > 1
+    ]
+
+    if duplicates:
+        errors.append(f"Duplicate case_ids found: {duplicates}")
+
+    # Print report
     print("=== LABEL SANITY CHECK REPORT ===")
     print(f"Total label entries: {len(labels)}")
     print(f"Verdict counts: {dict(verdict_counter)}")
-    if errors:
-        print("\n❌ ERRORS FOUND:")
-        for err in errors:
-            print("-", err)
-    else:
-        print("\n✅ No errors found in labels_v1.jsonl")
 
-# to run this check every time the file is executed 
+    if errors:
+        print("\nERRORS FOUND:")
+
+        for error in errors:
+            print("-", error)
+
+    else:
+        print("\nNo errors found in the ground-truth labels!")
+
+
 if __name__ == "__main__":
-    sanity_check_labels("data/labels_v1.jsonl")
+    sanity_check_labels("data/labels_dev.jsonl")
