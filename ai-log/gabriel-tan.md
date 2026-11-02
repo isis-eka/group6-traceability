@@ -99,3 +99,37 @@ deleted workspace/psf__requests-2931 and reran prepare_repo.py. The u"ööö" te
 
 ### What I kept or changed
 kept. told the team to rebuild their 2931 workspace
+
+## 2026-10-31 · Version 3: the agent (run_agent.py)
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/run_agent.py, prompts/agent_v1.txt, results/dev/v3/embedding.jsonl, docs/decisions.md, AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+Build version 3, the agent: the AI gets three read-only tools (search_tests, grep, read_file)
+and decides what to read, up to 10 tool calls per case, then gives a verdict. The limits are
+enforced in code (tool-call limit, paths kept inside the case folder, no .git, 200-line reads).
+Written as our own loop on the OpenAI Responses API, reusing run_v1.py's helpers and result
+format, with prompt agent_v1.txt based on verdict_v2's rules. Then run it on the 24 dev cases.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]
+
+## 2026-11-02 · No-retrieval baseline
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** prompts/no_retrieval_v1.txt, src/run_v1.py, results/dev/no_retrieval/none.jsonl, docs/decisions.md, AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+Build the no-retrieval baseline from the plan: the AI sees only the acceptance criterion, no
+tests or code, and must pick covered, partial or not_covered. Added `--search none` to
+run_v1.py and the prompt no_retrieval_v1.txt, then ran it on the 24 dev cases.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]
