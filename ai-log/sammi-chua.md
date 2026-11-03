@@ -64,3 +64,41 @@ Differed on 3718 (me partial, AI not_covered) and 4106 (me not_covered, AI parti
 
 ### What I kept or changed
 Accepted both fixes, because the 1142 and 2931 examples convinced me.
+
+## 2026-11-03 · Stop evaluate.py runs overwriting each other
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/evaluation/evaluate.py, AGENTS.md
+- **Outcome:** Kept
+
+### What I asked for
+Fix the evaluate.py bugs Gabriel reported (match on the full case id, take the results file as an
+argument). Xiaoning's commit 182fc88 had already fixed those and the missing `false_all_clear`.
+What was left: every round's results file is called `embedding.jsonl`, so v1, v1_k5 and v3 all
+wrote `results/embedding_*.csv` and overwrote each other. The CSVs now go next to the results
+file, and `--labels` lets the script be tested on a made-up key without opening the real one.
+
+### How I checked it
+Read the AI's explanation of the problem and its test result (perfect answers scored 1.0). Did not run it myself.
+
+### What I kept or changed
+Kept it as is, because without it the scores from different runs overwrite each other.
+
+## 2026-11-03 · Draft test-set acceptance criteria
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** data/criteria_test_draft.jsonl
+- **Outcome:** Changed
+
+### What I asked for
+Draft acceptance criteria for the 18 test-set issues from issue text only
+(data/issue_text_test.jsonl), following prompts/draft_criteria.txt: Given/when/then, 1-2 per
+issue, no invented details. 21 drafts, reviewed one by one as multiple-choice questions in chat;
+final file: 22 criteria for 18 issues, all "reviewed": true. Flagged as weakest: 3738 (the issue
+is a policy discussion), 6028 (only says "407 on Python 3.8.12"), 2873 (the issue doesn't say
+what body should be sent).
+
+### How I checked it
+Read each issue summary and its criterion and decided whether to keep or drop the issue. 
+
+### What I kept or changed
+
+Kept all 18, added an ac2 for 1327 because  it's the general rule behind ac1, and the issue suggests it directly 

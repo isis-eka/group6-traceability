@@ -48,18 +48,24 @@ def main():
         "results_file",
         help="Path to the model predictions JSONL file"
     )
+    parser.add_argument(
+        "--labels",
+        default="data/labels_dev.jsonl",
+        help="Path to the answer key JSONL file"
+    )
 
     args = parser.parse_args()
 
-    LABELS_PATH = "data/labels_dev.jsonl"
+    LABELS_PATH = args.labels
     RESULTS_PATH = args.results_file
-    # use the results filename to create unique output filenames
+    # write the CSVs next to the results file, so rounds with the same file name
+    # (results/dev/v1/embedding.jsonl, results/dev/v3/embedding.jsonl) don't overwrite each other
+    out_dir = os.path.dirname(RESULTS_PATH) or "results"
     file_name = os.path.splitext(os.path.basename(RESULTS_PATH))[0]
-    OUTPUT_CSV = f"results/{file_name}_evaluation_summary.csv"
-    AGG_CSV = f"results/{file_name}_aggregated_metrics.csv"
+    OUTPUT_CSV = os.path.join(out_dir, f"{file_name}_evaluation_summary.csv")
+    AGG_CSV = os.path.join(out_dir, f"{file_name}_aggregated_metrics.csv")
 
-    # Create results folder if it doesn't exist
-    os.makedirs("results", exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
 
     # load ground truth and model output 
     labels_raw = load_jsonl(LABELS_PATH)

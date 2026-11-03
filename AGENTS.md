@@ -55,7 +55,7 @@ keyword search (`src/search_bm25.py`, later the BM25 baseline); no OpenAI key ->
 (`qwen3:8b`). `--search search_bm25` and `--ollama [MODEL]` choose them explicitly. Each result row
 records the search and model actually used; only OpenAI + embedding-search rows are reportable.
 Scoring scripts live in `src/evaluation/` (first drafts; run them from the repo root like the other scripts; they need `pandas` + `matplotlib`, now in `requirements.txt`):
-`sanity_check_labels.py` validates `data/labels_dev.jsonl`; `python src/evaluation/evaluate.py results/dev/v3/embedding.jsonl` compares one results file with `data/labels_dev.jsonl` and writes `results/<file name>_evaluation_summary.csv` + `results/<file name>_aggregated_metrics.csv`; `plot_metrics.py <aggregate csv>...` draws charts into `results/`.
+`sanity_check_labels.py` validates `data/labels_dev.jsonl`; `python src/evaluation/evaluate.py results/dev/v3/embedding.jsonl` compares one results file with `data/labels_dev.jsonl` (`--labels` for another key) and writes `<file name>_evaluation_summary.csv` + `<file name>_aggregated_metrics.csv` next to the results file (e.g. `results/dev/v3/`); `plot_metrics.py <aggregate csv>...` draws charts into `results/`.
 
 ## JSONL schemas (one JSON object per line)
 These schemas are proposed: agree on them as a team before relying on them, and update this file when they change.
