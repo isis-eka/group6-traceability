@@ -6,6 +6,23 @@ We test it on real GitHub issues from the **requests** and **flask** projects, t
 
 For how the scripts and files fit together, and who owns each step, see the diagrams in [`docs/architecture.md`](docs/architecture.md).
 
+## Use the tool on any repo
+
+After the one-time setup below, give it a GitHub repo (or a local folder) and an issue:
+
+```bash
+python src/trace.py --repo https://github.com/pallets/flask --issue https://github.com/pallets/flask/issues/5014
+python src/trace.py --repo https://github.com/pallets/flask --issue 5014                 # issue number in that repo
+python src/trace.py --repo ../myproject --issue story.txt                               # local folder, issue as text
+python src/trace.py --repo ../myproject --criterion "Given ..., when ..., then ..."     # your own criteria (repeatable)
+```
+
+It drafts acceptance criteria from the issue text (unless you give them), lets the agent check
+each one against the repo's tests and code (read-only, at most 10 tool calls each), and writes a
+traceability report to `reports/<repo>__<issue>.md`: each criterion's verdict, the tests cited
+and why, a summary such as "2 of 3 covered, 1 partial", and the next step for each. GitHub repos
+are cloned into `workspace/_trace/`. The verdicts are the AI's judgment: check them before acting.
+
 ## Folders
 
 | Folder | What goes here | Who mainly works here |
@@ -48,6 +65,8 @@ For how the scripts and files fit together, and who owns each step, see the diag
 | 5 | `python src/search_tests.py <instance_id> <covered\|not_covered> "<query>"` | Prints the 3 test functions most similar to the query, with scores |
 | 6 | `python src/run_v1.py` | Version 1: for each case in `data/cases.jsonl`, finds the 3 most similar tests and asks the AI once. Saves verdicts to `results/results.jsonl`. Add `--dry-run --limit 1` to see the prompt without calling the AI, or `--ollama` to test on a local Ollama model (qwen3:8b) instead of OpenAI |
 | 6b | `python src/run_v2.py` | Version 2: the same as step 6, plus the code the 3 tests call. It finds the functions and classes each test calls in the project's own source (not tests, docs or vendored copies), one level deep, and adds them under the tests in the prompt (at most 250 lines). Takes the same options as `run_v1.py`; each result row also lists `code_added` |
+| 6c | `python src/run_agent.py` | Version 3, the agent: instead of a fixed 3 tests, the AI uses three read-only tools (`search_tests`, `grep`, `read_file`) to look where it chooses, at most 10 calls per case, never outside the case's folder or inside `.git`. Same options as `run_v1.py`, plus `--verbose` to print each tool call; each result row also lists its `steps` |
+| 6d | `python src/run_v1.py --search none --prompt no_retrieval_v1` | No-retrieval baseline: the AI sees only the criterion, no tests or code, and must guess. Checks that versions 1-3 gain from what they are shown, and whether the model has memorised these projects |
 | 7 | `python src/evaluation/evaluate.py results/dev/v1/embedding.jsonl` | Scores one run against the answer key (`data/labels_v1.jsonl`). Writes `embedding_summary.csv` (one row per case; git-ignored, it lists the answer key tests) and `embedding_metrics.csv` (accuracy, false alarm and false all-clear rates, test precision/recall) next to it |
 | 8 | `python src/evaluation/plot_metrics.py results/dev/v1/embedding_metrics.csv results/dev/v1/bm25_metrics.csv` | Draws `accuracy.png` and `prf.png` into the same folder, with the runs side by side |
 

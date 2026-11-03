@@ -5,7 +5,7 @@ tested: `covered`, `partial`, `not_covered` or `needs_review`. Evaluated on SWE-
 from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 
 ## Hard rules
-- **Never read `data/labels.jsonl` or `data/labels_v1.jsonl` or send them (or anything derived from them) to the model.** They are the answer key; only scoring code may open them. Never commit them (`data/labels*.jsonl` is git-ignored); they are shared privately.
+- **Never read any answer key (`data/labels*.jsonl`, e.g. `labels_dev.jsonl`, or the labeller's notes in `answer_keys/`) or send it (or anything derived from it) to the model.** Only scoring code may open them. Never commit them (both are git-ignored); they are shared privately.
 - **Acceptance criteria are drafted from issue text only** (`problem_statement`). Never use tests, `test_patch`, `patch`, `FAIL_TO_PASS` or issue comments when drafting or reviewing them.
 - **The acceptance criteria owner works only from issue-text files** (`data/issue_text.jsonl`; for version 1, `data/issue_text_v1.jsonl`; for the test set, `data/issue_text_test.jsonl`). Never show them, or include in criteria-drafting prompts, any patch, test_patch, FAIL_TO_PASS or test file.
 - **Never commit `.env`.** Keys live only in `.env` (copied from `.env.example`).
@@ -22,10 +22,10 @@ from `psf/requests` and `pallets/flask`. Python 3.10+, OpenAI API.
 ## Folder layout
 | Path | Contents |
 |---|---|
-| `prompts/` | Plain-text prompts: `draft_criteria.txt`, `verdict_v1.txt` (bump version for changes) |
-| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels.jsonl`; version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json` (issue ids and split only: 10 `dev`, 18 `test`), `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (answer key; git-ignored, shared privately), `index_v1/` (embedded test-function chunks, git-ignored, rebuilt by `build_index.py`); test set (18 issues, added to `chosen_issues.json` by `src/pick_test_set.py`): `issue_text_test.jsonl` (criteria drafting input) |
+| `prompts/` | Plain-text prompts: `draft_criteria.txt`, `verdict_v1.txt`, `verdict_v2.txt`, `agent_v1.txt`, `no_retrieval_v1.txt` (bump version for changes; frozen since 31 Oct) |
+| `data/` | `issues.jsonl`, `issue_text.jsonl` (both git-ignored, rebuilt by scripts), `cases.jsonl`, `labels_dev.jsonl` (dev answer key, one row per case; git-ignored, shared privately); version 1 (10 dev issues: 9 `psf/requests`, 1 `pallets/flask`): `chosen_issues.json` (issue ids and split only: 10 `dev`, 18 `test`), `issue_text_v1.jsonl` (criteria drafting input), `labels_v1.jsonl` (first answer key, one row per issue and copy, replaced by `labels_dev.jsonl`; git-ignored), `index_v1/` (embedded test-function chunks, git-ignored, rebuilt by `build_index.py`); test set (18 issues, added to `chosen_issues.json` by `src/pick_test_set.py`): `issue_text_test.jsonl` (criteria drafting input) |
 | `src/` | Python scripts; `src/evaluation/` holds the scoring scripts (`sanity_check_labels.py`, `evaluate.py`, `plot_metrics.py`; first drafts, still under review). Only scoring code may open the label files |
-| `results/` | `results.jsonl`, score tables, charts |
+| `results/` | One folder per round: `results/<split>/<round>/<search>.jsonl` (e.g. `results/dev/v3/embedding.jsonl`), score tables, charts |
 | `workspace/` | Cloned requests/flask per case. Git-ignored, rebuilt by scripts |
 | `docs/` | `decisions.md` (design decisions and why), `architecture.md` (Mermaid diagrams: pipeline and data model) |
 | `ai-log/` | AI use log per member; `tools/ai_disclosure.py` checks them |
@@ -46,6 +46,7 @@ python src/run_v1.py --ollama                   # same, verdicts on local Ollama
 python src/run_v2.py --dry-run --limit 1        # version 2: v1 + the code the found tests call (same options as run_v1)
 python src/run_agent.py --case <case_id> --verbose  # version 3: agent with search_tests/grep/read_file, max 10 calls (same options)
 python src/run_v1.py --search none --prompt no_retrieval_v1   # no-retrieval baseline: criterion only, no tests
+python src/trace.py --repo <github link or folder> --issue <issue link, number or file>   # the end-user tool: report in reports/
 ```
 `covered` = base commit + code fix + its tests; `not_covered` = base commit + code fix only.
 Scripts are run from the repo root. `run_v1.py` defaults to the embedding search (`src/search_tests.py`)
@@ -54,7 +55,7 @@ keyword search (`src/search_bm25.py`, later the BM25 baseline); no OpenAI key ->
 (`qwen3:8b`). `--search search_bm25` and `--ollama [MODEL]` choose them explicitly. Each result row
 records the search and model actually used; only OpenAI + embedding-search rows are reportable.
 Scoring scripts live in `src/evaluation/` (first drafts; run them from the repo root like the other scripts; they need `pandas` + `matplotlib`, now in `requirements.txt`):
-`sanity_check_labels.py` validates the answer key, `evaluate.py` compares `results/results.jsonl` with the labels and writes `results/evaluation_summary.csv` + `results/aggregated_metrics.csv`, `plot_metrics.py` draws charts from the aggregate CSV into `results/`.
+`sanity_check_labels.py` validates `data/labels_dev.jsonl`; `python src/evaluation/evaluate.py results/dev/v3/embedding.jsonl` compares one results file with `data/labels_dev.jsonl` and writes `results/<file name>_evaluation_summary.csv` + `results/<file name>_aggregated_metrics.csv`; `plot_metrics.py <aggregate csv>...` draws charts into `results/`.
 
 ## JSONL schemas (one JSON object per line)
 These schemas are proposed: agree on them as a team before relying on them, and update this file when they change.
@@ -66,21 +67,24 @@ These schemas are proposed: agree on them as a team before relying on them, and 
  "workspace": "workspace/psf__requests-2317/covered"}
 ```
 
-`data/labels.jsonl`: answer key, human-written, never shown to the model
-```json
-{"case_id": "psf__requests-2317__ac1__covered", "label": "covered",
- "labeler": "Xiaoning", "note": "test_x asserts the fixed behaviour"}
-```
-`label` is one of `covered | partial | not_covered`.
-
-`results/results.jsonl`: one row per model run on a case
+`data/labels_dev.jsonl`: answer key, human-written, never shown to the model; one row per case in
+`cases.jsonl` (so both copies of every criterion), the fields `evaluate.py` and `sanity_check_labels.py` read
 ```json
 {"case_id": "psf__requests-2317__ac1__covered", "verdict": "covered",
- "reason": "1-2 sentences", "tests_used": ["tests/test_requests.py::test_x"],
- "model": "gpt-6-luna", "prompt": "verdict_v1", "tool_calls": 4,
- "timestamp": "2026-10-15T12:00:00Z"}
+ "tests": ["tests/test_requests.py::test_x"], "note": "test_x asserts the fixed behaviour"}
 ```
-`verdict` is one of `covered | partial | not_covered | needs_review`.
+`verdict` is one of `covered | partial | not_covered`; `tests` is `[]` for `not_covered`.
+
+`results/<split>/<round>/<search>.jsonl`: one row per model run on a case
+```json
+{"case_id": "psf__requests-2317__ac1__covered", "verdict": "covered",
+ "reason": "1-2 sentences", "tests_found": ["tests/test_requests.py::test_x"],
+ "tests_used": ["tests/test_requests.py::test_x"], "version": "v1", "search": "search_tests",
+ "model": "gpt-6-luna", "prompt": "verdict_v1", "tool_calls": 0,
+ "tokens_in": 570, "tokens_out": 80, "timestamp": "2026-10-15T12:00:00Z"}
+```
+`verdict` is one of `covered | partial | not_covered | needs_review`. `tests_found` is what the search
+returned (scored for precision/recall); version 2 adds `code_added`, version 3 adds `steps`.
 
 ## Conventions
 - Commit small and often with clear messages (e.g. "add verdict prompt v2").
