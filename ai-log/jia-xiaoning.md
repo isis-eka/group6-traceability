@@ -21,10 +21,12 @@ Check your file with: python tools/ai_disclosure.py check-logs
 I asked it to check if there was anything missing to ensure that the model will work well after passing in the results and ground truth. 
 
 ### How I checked it
-I made deliberate mistakes to the ground truth file such that I would run into an error, then I implemented the file to check that it works well
+I made deliberate mistakes to the ground truth file such that I would run into an error, then I implemented the file to check that it works well. 
 
 ### What I kept or changed
 Kept the main structure of my code for the evaluation, but added in the src/evaluation/sanity_check_labels.py just to be extra safe. Also added the extra portion on the bar graphs for visuals.  
+
+---
 
 ## 2026-11-01 · Checking for evaluate.py
 - **Tool (model):** Doubao (2.31.4_win)
@@ -47,3 +49,35 @@ OUTPUT_CSV = f"results/{file_name}_evaluation_summary.csv"
 AGG_CSV = f"results/{file_name}_aggregated_metrics.csv"
 
 to prevent the evaluation from being overwritten every time I run the evaluator in order to comapre V1, V2, V3 and no-retrieval baseline better. 
+
+---
+
+## 2026-11-02 · Catching key points for dev_answer_keys
+- **Tool (model):** ChatGPT (GPT-6) 
+- **Files:** data/cases.jsonl, labels_dev.jsonl
+- **Outcome:** Changed
+
+### What I asked for
+I asked it to pull out the key points for me to draft the answer keys for the different requests from the criteria that were drafted from my teammates.  
+
+### How I checked it
+Verified by running checks on sanity. 
+
+### What I kept or changed
+Used information given to me 
+
+---
+
+## 2026-11-05 · Catching key points to work on labels from data/criteria_test_draft.jsonl 
+- **Tool (model):** ChatGPT (GPT-6) 
+- **Files:** data/criteria_test_draft.jsonl
+- **Outcome:** Changed
+
+### What I asked for
+I asked it for code to check relevant tests and to check the variant of the different instance_id.   
+
+### How I checked it
+Verified by running checks on sanity. 
+
+### What I kept or changed
+Used information given to me 
