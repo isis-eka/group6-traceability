@@ -1,0 +1,2 @@
+version,search_strategy,total_cases,verdict_accuracy,needs_review_rate,false_alarm_rate,false_all_clear_rate,avg_precision,avg_recall,avg_f1,num_covered_cases_for_prf
+v1,search_tests,24,0.4583333333333333,0.0,0.041666666666666664,0.08333333333333333,0.2222222222222222,0.6666666666666666,0.3333333333333333,9

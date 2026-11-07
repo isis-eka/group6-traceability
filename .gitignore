@@ -28,3 +28,9 @@ data/index_v1/
 
 # Per-case score tables list the answer key tests, so they stay off GitHub like labels*.jsonl
 results/**/*_summary.csv
+
+# Labelling notes are part of the answer key too
+answer_keys/
+
+# The partial drop list names the right tests, so it stays off GitHub like an answer key
+data/partial_drops.jsonl

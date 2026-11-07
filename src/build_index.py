@@ -123,6 +123,8 @@ def main():
     missing = [str(f) for _, _, f in folders if not f.is_dir()]
     if missing:
         sys.exit("Missing workspace folders (run src/prepare_repo.py):\n  " + "\n  ".join(missing))
+    # partial copies exist only for issues in data/partial_drops.jsonl (prepare_repo.py --partial)
+    folders += [(i, "partial", WORKSPACE / i / "partial") for i in ids if (WORKSPACE / i / "partial").is_dir()]
 
     if args.dry_run:
         print(f"{'folder':<36} {'test files':>10} {'chunks':>7}")

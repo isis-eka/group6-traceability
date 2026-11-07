@@ -36,6 +36,8 @@ pip install -r requirements.txt
 cp .env.example .env        # then paste OPENAI_API_KEY
 python src/load_swebench.py                     # -> data/issues.jsonl (requests + flask only)
 python src/prepare_repo.py psf__requests-2317   # -> workspace/<id>/covered, workspace/<id>/not_covered (--all: dev set, --test: test set)
+python src/prepare_repo.py --partial            # -> workspace/<id>/partial: covered minus the tests or lines in data/partial_drops.jsonl (git-ignored, an answer key)
+python src/make_cases.py --criteria data/criteria_test_draft.jsonl --out data/cases_test.jsonl   # one case per reviewed criterion and copy (partial too, once built)
 python src/export_issue_text.py                 # -> data/issue_text.jsonl (instance_id + problem_statement only)
 python src/build_index.py --dry-run             # -> workspace/_chunks/ (chunks only, no API calls)
 python src/build_index.py                       # -> data/index_v1/<id>__<variant>.jsonl (one embedded chunk per test function)

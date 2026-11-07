@@ -328,3 +328,19 @@ Write the Version 2 script: like run_v1, but for each retrieved test find the fu
 
 ### What I kept or changed
 [to fill by Isis Eka]
+
+## 2026-11-06 · Test-set cases, test index and partial copies
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/make_cases.py, src/prepare_repo.py, src/build_index.py, data/cases.jsonl, data/cases_test.jsonl, results/dev/*/*_aggregated_metrics.csv, AGENTS.md, .gitignore
+- **Outcome:** Kept
+
+### What I asked for
+Score the dev runs with evaluate.py, build the 44 test-set cases from Sammi's criteria (new src/make_cases.py: one case per reviewed criterion and copy, partial included once built), build the test-set embedding index for Gabriel, and add prepare_repo.py --partial: copy the covered copy and delete the test functions listed in data/partial_drops.jsonl (git-ignored, since it names the right tests). build_index.py now also indexes partial copies when they exist.
+
+Then: let --partial also remove single lines (`remove_lines`, e.g. one assert) since most fix tests are a single test, suggest which asserts to remove so one part of a criterion goes untested (I chose all 9; 2 turned out identical to not_covered and were removed, leaving 7: 4 dev, 3 test), build and index the partial copies, and add their cases (5 dev rows appended to data/cases.jsonl, 4 in data/cases_test.jsonl).
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
