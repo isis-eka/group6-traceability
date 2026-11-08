@@ -110,7 +110,7 @@ def main():
         need_review = 1 if pred_v == "needs_review" else 0
         # model predicting not_covered when the ground truth says covered
         false_alarm = 1 if (pred_v == "not_covered" and gt_v == "covered") else 0
-        false_all_clear = 1 if (pred_v == "covered" and gt_v == "not_covered") else 0
+        false_all_clear = 1 if (pred_v == "covered" and gt_v in ("not_covered", "partial")) else 0
 
         # compute test retrieval metrics 
         gt_tests_raw = gt["tests"]
