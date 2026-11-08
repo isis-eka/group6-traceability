@@ -113,10 +113,12 @@ Written as our own loop on the OpenAI Responses API, reusing run_v1.py's helpers
 format, with prompt agent_v1.txt based on verdict_v2's rules. Then run it on the 24 dev cases.
 
 ### How I checked it
-[to fill by Gabriel Tan]
+ran the new agent version on 1 case to first verify the tool calling loop. it had a bug that caused it to not complete the call and got stuck.
+reprompt with what i observed to fined the issue, claude pointed out the issue and fixed it. reran the 1 case then with the full
+dev set after confirming it worked with the 1 case.
 
 ### What I kept or changed
-[to fill by Gabriel Tan]
+changed the tool calling loop to fix the bug and kept the updated code.
 
 ## 2026-11-02 · No-retrieval baseline
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -129,10 +131,10 @@ tests or code, and must pick covered, partial or not_covered. Added `--search no
 run_v1.py and the prompt no_retrieval_v1.txt, then ran it on the 24 dev cases.
 
 ### How I checked it
-[to fill by Gabriel Tan]
+ran and skimmed through code to verify it did not read the tests or code.
 
 ### What I kept or changed
-[to fill by Gabriel Tan]
+correctly implemented, ran as expected, kept
 
 ## 2026-11-02 · End-user command trace.py (repo link + issue -> traceability report)
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -147,7 +149,28 @@ and writes a Markdown traceability report (verdict, tests cited, reason, summary
 Also a README section with runnable examples.
 
 ### How I checked it
-[to fill by Gabriel Tan]
+ran it with python src/trace.py --repo https://github.com/pallets/flask --issue 5014
+checked results correct in the reports/pallets__flask__5014.md
 
 ### What I kept or changed
-[to fill by Gabriel Tan]
+worked well results as expected, kept
+
+## 2026-11-09 · Test-set runs (V3 agent + no-retrieval baseline) and false all-clear fix in evaluate.py
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** results/test/v3/, results/test/no_retrieval/, src/evaluation/evaluate.py
+- **Outcome:** Kept
+
+### What I asked for
+Check that the test-set setup was complete, then run the agent (V3) and the no-retrieval
+baseline on gpt-6-luna: the 44 covered/not_covered cases, and the 4 partial cases into
+separate files (partial_*.jsonl). Score them with evaluate.py against labels_test.jsonl.
+Then fix a bug the scoring showed: false all-clear only counted `covered` when the key says
+`not_covered`; it now also counts `covered` when the key says `partial` (line 113), matching
+the plan's definition. All four test results files were rescored.
+
+### How I checked it
+checked throught he results, looked through the code for the bug pointed out in evaluate.
+reran results to verify bug fix
+
+### What I kept or changed
+implemented fix and kept updated changes
