@@ -22,10 +22,14 @@ workspace/_source/ keeps its history, because the copies are cloned from it.
 """
 import ast
 import json
+import os
+import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+import subprocess
+import stat
 
 ISSUES = Path("data/issues.jsonl")
 CHOSEN = Path("data/chosen_issues.json")
@@ -139,14 +143,26 @@ def make_partial(folder, test_ids, remove_lines):
             sys.exit(f"Removing {spans} from {file} breaks it: {e}")
         file.write_text(source, encoding="utf-8")
 
-
+def handle_remove_error(func, path, exc):
+    if isinstance(exc, PermissionError):
+        if func == os.rmdir:
+            subprocess.run(
+                ["cmd", "/c", "rmdir", "/s", "/q", path],
+                check=True
+            )
+            return
+        os.chmod(path, stat.S_IWRITE)
+        func(path)
+    else:
+        raise exc
+    
 def prepare_partial(instance_id, test_ids, remove_lines):
     covered = WORKSPACE / instance_id / "covered"
     target = WORKSPACE / instance_id / "partial"
     if not covered.is_dir():
         sys.exit(f"Missing {covered}: run python src/prepare_repo.py {instance_id} first")
     if target.exists():
-        shutil.rmtree(target)  # rebuilt every time, so an edited drop list always applies
+        shutil.rmtree(target, onexc=handle_remove_error)  # rebuilt every time, so an edited drop list always applies
     shutil.copytree(covered, target)
     make_partial(target, test_ids, remove_lines)
     n_lines = sum(e - s + 1 for items in remove_lines.values() for s, e in map(line_span, items))
