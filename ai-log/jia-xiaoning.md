@@ -68,16 +68,72 @@ Used information given to me
 
 ---
 
-## 2026-11-05 · Catching key points to work on labels from data/criteria_test_draft.jsonl 
+## 2026-11-05 · Identifying relevant tests and instance variants for labelling
 - **Tool (model):** ChatGPT (GPT-6) 
 - **Files:** data/criteria_test_draft.jsonl
 - **Outcome:** Changed
 
 ### What I asked for
-I asked it for code to check relevant tests and to check the variant of the different instance_id.   
+I asked ChatGPT to help identify relevant tests for the acceptance criteria and determine the different variants associated with each instance_id. 
 
 ### How I checked it
-Verified by running checks on sanity. 
+I independently ran sanity checks to verify the suggested information and checked that the identified tests and instance variants were relevant to the corresponding criteria.
 
 ### What I kept or changed
-Used information given to me 
+I used the information provided by ChatGPT as a reference when working on the labels.
+
+---
+
+## 2026-11-06 · Developing presentation slide content and structure
+- **Tool (model):** ChatGPT (GPT-6) 
+- **Files:** Group 6 traceability evaluation presentation slides
+- **Outcome:** Changed
+
+### What I asked for
+I asked ChatGPT to help organise the presentation into a logical slide structure and identify the key information that should be included in each section.
+
+### How I checked it
+I compared the suggested slide content against our actual project implementation, dataset information and evaluation results. I also checked that the information was consistent with the work completed by my group.
+
+### What I kept or changed
+I used the suggested structure and explanations to organise my slides.
+
+---
+
+## 2026-11-08 · Preparing partial repository copies
+- **Tool (model):** ChatGPT (GPT-6) 
+- **Files:** data/partial_drops.jsonl, src/prepare_repo.py, relevant files under workspace/, proposed entries for labels_dev.jsonl and labels_test.jsonl
+- **Outcome:** Changed
+
+### What I asked for
+I asked ChatGPT to help organise the partial-coverage instructions for seven selected issues, including identifying which assertions or tests should be removed.
+
+I also asked for assistance formatting the corresponding nine proposed answer-key entries using the required JSONL structure, including the case_id, verdict, tests and note fields.
+
+### How I checked it
+I independently reviewed the proposed test removals and ran the repository preparation script:
+
+python src/prepare_repo.py --partial
+
+I checked the terminal output to confirm that all seven partial repository copies were generated successfully.
+
+### What I kept or changed
+I used the suggested instructions. The entries were prepared as drafts.
+
+---
+
+## 2026-11-08 · Refining presentation slides
+- **Tool (model):** ChatGPT (GPT-6) 
+- **Files:** Group 6 traceability evaluation presentation slides
+- **Outcome:** Changed
+
+### What I asked for
+I asked ChatGPT to review specific slide content, clarify technical explanations and improve the wording of the presentation.
+
+I also asked it to help check the consistency of figures and explanations across different slides, particularly the distinction between partial-coverage cases and the number of partially labelled cases.
+
+### How I checked it
+I cross-checked the suggested changes against our evaluation data.
+
+### What I kept or changed
+I used the suggestions to improve the clarity and consistency of the slides.
