@@ -16,7 +16,7 @@ Output: reports/<repo>__<issue number>.md (or --out), also printed; an existing 
         replaced: the new one gets the next free number (..._2.md, ..._3.md). GitHub repos are cloned (shallow) into
         workspace/_trace/<owner>__<repo>/; the test index is cached next to them.
 
-Same agent and limits as run_agent.py (prompt agent_v2 by default, --prompt to change): read-only, at most 10 tool calls per criterion, never
+Same agent and limits as run_agent.py (prompt agent_v1 by default, --prompt to change): read-only, at most 10 tool calls per criterion, never
 outside the repo folder or inside .git. The report is the AI's judgment: check before acting.
 This is the product, not the evaluation: it never reads data/ and saves nothing to results/.
 """
@@ -215,7 +215,7 @@ def main():
     p.add_argument("--criteria", help="text file, one acceptance criterion per line")
     p.add_argument("--out", help="report file (default reports/<repo>__<issue number>.md); "
                                  "if it exists, _2, _3, ... is added instead of replacing it")
-    p.add_argument("--prompt", default="agent_v2", help="agent prompt in prompts/, without .txt (default agent_v2)")
+    p.add_argument("--prompt", default="agent_v1", help="agent prompt in prompts/, without .txt (default agent_v1)")
     p.add_argument("--k", type=int, default=3, help="tests per search_tests call")
     p.add_argument("--ollama", nargs="?", const=run_v1.OLLAMA_MODEL, metavar="MODEL",
                    help="use the local Ollama server instead of OpenAI, for testing only")

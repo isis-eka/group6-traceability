@@ -191,3 +191,21 @@ prompt name in the report header. The evaluation (run_agent.py, results/) is unc
 
 ### What I kept or changed
 [to fill by Gabriel Tan]
+
+## 2026-11-10 · Dev reruns with the new prompts, and trace.py back to agent_v1
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/trace.py, README.md
+- **Outcome:** Changed
+
+### What I asked for
+Rerun the dev set with the new prompts (V1 and V2 with verdict_v3, V3 with agent_v2) on
+gpt-6-luna and compare them with the frozen prompts. All three scored lower on the 24 main
+cases (V1 0.46 -> 0.42, V2 0.58 -> 0.46, V3 0.83 -> 0.54), so switch trace.py's default agent
+prompt back to agent_v1, the one evaluated (--prompt agent_v2 still picks the new one). The
+dev index and the psf__requests-4718 copies had to be rebuilt first.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]

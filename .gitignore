@@ -34,3 +34,5 @@ answer_keys/
 
 # The partial drop list names the right tests, so it stays off GitHub like an answer key
 data/partial_drops.jsonl
+
+*.log
