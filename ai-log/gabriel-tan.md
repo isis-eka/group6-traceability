@@ -174,3 +174,20 @@ reran results to verify bug fix
 
 ### What I kept or changed
 implemented fix and kept updated changes
+
+## 2026-11-09 · trace.py: numbered report files and the agent_v2 prompt
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/trace.py, README.md
+- **Outcome:** Kept
+
+### What I asked for
+Stop trace.py replacing an existing report: a rerun now saves the next free number
+(`reports/<repo>__<issue>_2.md`, `_3.md`, ...), also for `--out`. Switch its agent prompt from
+`agent_v1` to `prompts/agent_v2.txt`, with a `--prompt` option to pick another, and show the
+prompt name in the report header. The evaluation (run_agent.py, results/) is unchanged.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]
