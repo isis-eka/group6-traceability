@@ -187,10 +187,10 @@ Stop trace.py replacing an existing report: a rerun now saves the next free numb
 prompt name in the report header. The evaluation (run_agent.py, results/) is unchanged.
 
 ### How I checked it
-[to fill by Gabriel Tan]
+ran trace multiple times to ensure no overwriting, checked the code changes to verify calls to agent_v1 were changed to v2
 
 ### What I kept or changed
-[to fill by Gabriel Tan]
+worked as expectedf, kept
 
 ## 2026-11-10 · Dev reruns with the new prompts, and trace.py back to agent_v1
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -205,7 +205,24 @@ prompt back to agent_v1, the one evaluated (--prompt agent_v2 still picks the ne
 dev index and the psf__requests-4718 copies had to be rebuilt first.
 
 ### How I checked it
-[to fill by Gabriel Tan]
+reran trace on dev set, compared results
 
 ### What I kept or changed
-[to fill by Gabriel Tan]
+results were worse off with the new prompts, switched back to agent_v1 and verdict_v2
+
+## 2026-11-10 · README: demo video link and sample reports
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** README.md, reports/demo-shop.md, reports/demo-shop_2.md, reports/pallets__flask__5014.md
+- **Outcome:** Kept
+
+### What I asked for
+Update the README with the YouTube demo video (https://youtu.be/DDAHtk_iD8k) and the other
+demo results: a table of the three reports from the demo runs, and a note that the two
+demo-shop runs differ on AC1. The 397 MB video file is left out of the repo (over GitHub's
+100 MB limit); the README links to YouTube instead.
+
+### How I checked it
+read through updated section, verified youtube link worked
+
+### What I kept or changed
+kept most, edited sections to mention the different in the 2nd demorepo run.

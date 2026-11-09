@@ -43,7 +43,19 @@ The report is written to `reports/demo-shop.md` (an existing report is never rep
 python src/trace.py --repo ../demo-shop --criterion "Given a cart with items, when the shopper checks out, then the receipt total is the subtotal plus 9% GST."
 ```
 
-A sample report from a real run is in [`reports/pallets__flask__5014.md`](reports/pallets__flask__5014.md).
+### Demo video and sample reports
+
+**Demo video:** [youtu.be/DDAHtk_iD8k](https://youtu.be/DDAHtk_iD8k) shows the tool run on demo-shop and on a real flask issue.
+
+Reports from the runs in the video (all `gpt-6-luna`, prompt `agent_v1`):
+
+| Report | What was checked | Result |
+|---|---|---|
+| [`reports/demo-shop.md`](reports/demo-shop.md) | demo-shop, all 7 criteria | 3 covered, 1 partial, 3 not covered |
+| [`reports/demo-shop_2.md`](reports/demo-shop_2.md) | demo-shop, same criteria, test_add_item() commented out (AC1) | 2 covered, 2 partial, 3 not covered |
+| [`reports/pallets__flask__5014.md`](reports/pallets__flask__5014.md) | flask issue 5014 (blueprints need a non-empty name), criterion drafted from the issue text | 1 of 1 covered |
+
+For the second demo-shop run, `test_add_item` was commented out to show the tool reacting to a removed test. Only AC1 changed: with its direct test gone, the tool cited `test_subtotal` (it adds 2 apples but asserts the subtotal, not the quantity) and downgraded AC1 from covered to partial.
 
 ## Use the tool on any repo
 
