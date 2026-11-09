@@ -399,7 +399,7 @@ models, `prepare_repo.py --partial`, `make_cases.py` and the current score file 
 the post-test prompt experiments. Point src/demo.py at data/labels_dev.jsonl, looked up by case_id.
 
 ### How I checked it
-[to fill by Isis Eka]
+read through updated read me and tested the example flow
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes 
