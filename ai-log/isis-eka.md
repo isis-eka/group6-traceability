@@ -282,10 +282,10 @@ kept changes
 Make prepare_repo.py delete each covered/not_covered copy's .git after applying the patches (and from copies that already exist), add --all to prepare every issue in data/chosen_issues.json on any OS, keep workspace/_source intact, add an AGENTS.md rule that agent tools only read inside the current case's folder, and add decision 11. Run it on my copies and check that no .git is left and the search results for psf__requests-1142 covered are unchanged.
 
 ### How I checked it
-[to fill by Isis Eka]
+ran ls -a workspace/pallets__flask-4045/covered | grep "^.git$" to make sure i dont get history returned 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept
 
 ## 2026-10-21 · Keep test-set answer keys off GitHub
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -296,10 +296,10 @@ Make prepare_repo.py delete each covered/not_covered copy's .git after applying 
 Change the ignore rule to **/labels*.jsonl so a labels file in any folder is ignored, and add a GitHub Actions check that fails a push if any answer key file is tracked.
 
 ### How I checked it
-[to fill by Isis Eka]
+checked gitignore file contained 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes
 
 ## 2026-10-21 · Pick the test set and prepare its issue text and code copies
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -310,10 +310,10 @@ Change the ignore rule to **/labels*.jsonl so a labels file in any folder is ign
 Pick the test-set issues, export their issue text only for Sammi (issue_text_test.jsonl), and build their covered/not_covered copies. Only 18 of the 45 non-dev issues pass the dev set's check, so I chose to use just those 18 rather than hand-pick right tests for more. Then list them in data/chosen_issues.json as split "test" instead of a separate file, with every script filtering by split (--all = dev, --test = test).
 
 ### How I checked it
-[to fill by Isis Eka]
+i checked the file that were to be sent to sammi and committed contained the 18 tests with only the problem statement 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes 
 
 ## 2026-10-22 · Version 2: add the code the tests call
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -324,10 +324,10 @@ Pick the test-set issues, export their issue text only for Sammi (issue_text_tes
 Write the Version 2 script: like run_v1, but for each retrieved test find the functions it calls and add their code to the prompt. run_v2.py finds called names in the 3 tests, looks up their definitions in the case folder's own source code (one level deep, at most 250 lines), and reuses run_v1's search, model, saving and resume through a small hook in run_v1.main, which leaves run_v1's prompts unchanged.
 
 ### How I checked it
-[to fill by Isis Eka]
+used python src/run_v2.py --dry-run --limit 1 to verify the function could collate the tests and the code it calls 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes 
 
 ## 2026-11-06 · Test-set cases, test index and partial copies
 - **Tool (model):** Claude Code (Claude Opus 5.5)
@@ -340,7 +340,49 @@ Score the dev runs with evaluate.py, build the 44 test-set cases from Sammi's cr
 Then: let --partial also remove single lines (`remove_lines`, e.g. one assert) since most fix tests are a single test, suggest which asserts to remove so one part of a criterion goes untested (I chose all 9; 2 turned out identical to not_covered and were removed, leaving 7: 4 dev, 3 test), build and index the partial copies, and add their cases (5 dev rows appended to data/cases.jsonl, 4 in data/cases_test.jsonl).
 
 ### How I checked it
-[to fill by Isis Eka]
+asked claude to show me the list of partial copies generated adn verified they made sense to me 
 
 ### What I kept or changed
-[to fill by Isis Eka]
+kept changes
+
+## 2026-11-08 · Fix label test ids and drop the 4718 partial copy
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** data/cases.jsonl (labels and partial_drops are git-ignored and changed locally only)
+- **Outcome:** Kept
+
+### What I asked for
+Check Xiaoning's updated labels_dev/labels_test with a script, correct 11 test ids that named tests not in the copies (wrong class names or test names; no verdicts changed), move them into data/, and drop the requests-4718 partial copy, because the labels showed an older test still in that copy already checks the criterion (so the copy was really covered). Removed its case row, drop-list row, copy and index file.
+
+### How I checked it
+i Opened data/labels_dev.jsonl which had randomly selected a row which would contain folder and test IDs Open that file inside that foldereg the case for 5087 not covered , and search (Cmd+F) for test function and verified its there .
+
+### What I kept or changed
+kept changes 
+
+## 2026-11-08 · Update architecture.md to the current pipeline
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** docs/architecture.md
+- **Outcome:** Kept
+
+### What I asked for
+Bring docs/architecture.md up to date: it still showed only version 1 and labels_v1.jsonl. Add the test set, the partial copies, the baseline and versions 2 and 3, the new answer keys, a diagram of trace.py, and the current data model (partial variant, partial drop list, results fields for versions 2 and 3).
+
+### How I checked it
+checked the diagram in github web 
+
+### What I kept or changed
+kept changes 
+
+## 2026-11-09 · Run V1 and V2 on the test set, dev partial copies and V2 on dev
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** results/test/v1/, results/test/v2/, results/dev/*/partial_*.jsonl, results/dev/v2/, results/dev/*/*_aggregated_metrics.csv (committed in 78c5def)
+- **Outcome:** Kept
+
+### What I asked for
+Run V1 and V2 (embedding search, gpt-6-luna, frozen prompts) on the 48 test cases, splitting the 4 partial copies into partial_embedding.jsonl like Gabriel's baseline and V3 runs. Then run the 4 dev partial copies for the baseline, V1 (BM25, embedding, top 5) and V3, and V2 on all 28 dev cases. Re-score every dev and test run with evaluate.py after Gabriel's fix that counts covered-on-partial as a false all-clear (only the dev baseline changed, 0.58 to 0.75 on 24 cases).
+
+### How I checked it
+checked that results showed up in the results/test folder for 2 runs V1 and V2 
+
+### What I kept or changed
+kept changes 
