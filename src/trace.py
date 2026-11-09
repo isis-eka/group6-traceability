@@ -12,10 +12,11 @@ Run:    python src/trace.py --repo https://github.com/psf/requests --issue https
         python src/trace.py --repo ../myproject --criteria criteria.txt             # one criterion per line
 Needs:  .env with OPENAI_API_KEY (or --ollama), git for GitHub links. Set GITHUB_TOKEN in .env
         if GitHub's rate limit for issue downloads is hit.
-Output: reports/<repo>__<issue number>.md (or --out), also printed. GitHub repos are cloned (shallow) into
+Output: reports/<repo>__<issue number>.md (or --out), also printed; an existing report is never
+        replaced: the new one gets the next free number (..._2.md, ..._3.md). GitHub repos are cloned (shallow) into
         workspace/_trace/<owner>__<repo>/; the test index is cached next to them.
 
-Same agent and limits as run_agent.py: read-only, at most 10 tool calls per criterion, never
+Same agent and limits as run_agent.py (prompt agent_v1 by default, --prompt to change): read-only, at most 10 tool calls per criterion, never
 outside the repo folder or inside .git. The report is the AI's judgment: check before acting.
 This is the product, not the evaluation: it never reads data/ and saves nothing to results/.
 """
@@ -166,13 +167,22 @@ def summary(results):
     return ", ".join(parts)
 
 
-def report(repo_info, issue, results, model, drafted, lines):
+def free_path(path):
+    """path itself if it does not exist yet, else the first free path_2, path_3, ... (never overwrite a report)."""
+    new, n = path, 2
+    while new.exists():
+        new = path.with_name(f"{path.stem}_{n}{path.suffix}")
+        n += 1
+    return new
+
+
+def report(repo_info, issue, results, model, prompt_name, drafted, lines):
     out = [f"# Traceability report: {repo_info['label']}", ""]
     commit = f" @ `{repo_info['sha'][:10]}`" if repo_info.get("sha") else ""
     out += [f"- **Repo:** {repo_info['label']}{commit}"]
     if issue:
         out += [f"- **Issue:** [{issue['title']}]({issue['link']})"]
-    out += [f"- **Checked:** {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC with `{model}` "
+    out += [f"- **Checked:** {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC with `{model}`, prompt `{prompt_name}` "
             f"(agent, at most {run_agent.MAX_CALLS} read-only tool calls per criterion)",
             "", f"## Summary: {summary(results)}", "",
             "| # | Acceptance criterion | Verdict | Tests cited |", "|---|---|---|---|"]
@@ -203,7 +213,9 @@ def main():
     p.add_argument("--issue", help="GitHub issue link, issue number in --repo, or a text file")
     p.add_argument("--criterion", action="append", help="an acceptance criterion (repeatable)")
     p.add_argument("--criteria", help="text file, one acceptance criterion per line")
-    p.add_argument("--out", help="report file (default reports/<repo>__<issue number>.md)")
+    p.add_argument("--out", help="report file (default reports/<repo>__<issue number>.md); "
+                                 "if it exists, _2, _3, ... is added instead of replacing it")
+    p.add_argument("--prompt", default="agent_v1", help="agent prompt in prompts/, without .txt (default agent_v1)")
     p.add_argument("--k", type=int, default=3, help="tests per search_tests call")
     p.add_argument("--ollama", nargs="?", const=run_v1.OLLAMA_MODEL, metavar="MODEL",
                    help="use the local Ollama server instead of OpenAI, for testing only")
@@ -230,7 +242,7 @@ def main():
     index = build_index(folder, index_path)
     lines = {c["test_id"]: c["start_line"] for c in index}
     search = make_search(index)
-    template = Path("prompts/agent_v1.txt").read_text(encoding="utf-8")
+    template = Path(f"prompts/{args.prompt}.txt").read_text(encoding="utf-8")
 
     results = []
     for n, criterion in enumerate(criteria, 1):
@@ -243,9 +255,9 @@ def main():
                         "tests_used": used, "steps": steps})
         print(f"  {verdict}  ({len(steps)} tool calls)")
 
-    text = report(repo_info, issue, results, model, drafted, lines)
+    text = report(repo_info, issue, results, model, args.prompt, drafted, lines)
     number = re.search(r"/(?:issues|pull)/(\d+)", issue["link"]) if issue else None
-    out = Path(args.out or f"reports/{repo_info['name']}{'__' + number.group(1) if number else ''}.md")
+    out = free_path(Path(args.out or f"reports/{repo_info['name']}{'__' + number.group(1) if number else ''}.md"))
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(text, encoding="utf-8")
     print(f"\n{text}\nSaved to {out}")

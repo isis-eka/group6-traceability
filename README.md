@@ -19,7 +19,9 @@ python src/trace.py --repo ../myproject --criterion "Given ..., when ..., then .
 
 It drafts acceptance criteria from the issue text (unless you give them), lets the agent check
 each one against the repo's tests and code (read-only, at most 10 tool calls each), and writes a
-traceability report to `reports/<repo>__<issue>.md`: each criterion's verdict, the tests cited
+traceability report to `reports/<repo>__<issue>.md` (never replaced: a rerun saves
+`..._2.md`, `..._3.md`, ...). It uses the agent prompt `prompts/agent_v1.txt`, the one evaluated (`--prompt` picks
+another). The report gives each criterion's verdict, the tests cited
 and why, a summary such as "2 of 3 covered, 1 partial", and the next step for each. GitHub repos
 are cloned into `workspace/_trace/`. The verdicts are the AI's judgment: check them before acting.
 

@@ -174,3 +174,38 @@ reran results to verify bug fix
 
 ### What I kept or changed
 implemented fix and kept updated changes
+
+## 2026-11-09 · trace.py: numbered report files and the agent_v2 prompt
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/trace.py, README.md
+- **Outcome:** Kept
+
+### What I asked for
+Stop trace.py replacing an existing report: a rerun now saves the next free number
+(`reports/<repo>__<issue>_2.md`, `_3.md`, ...), also for `--out`. Switch its agent prompt from
+`agent_v1` to `prompts/agent_v2.txt`, with a `--prompt` option to pick another, and show the
+prompt name in the report header. The evaluation (run_agent.py, results/) is unchanged.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]
+
+## 2026-11-10 · Dev reruns with the new prompts, and trace.py back to agent_v1
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** src/trace.py, README.md
+- **Outcome:** Changed
+
+### What I asked for
+Rerun the dev set with the new prompts (V1 and V2 with verdict_v3, V3 with agent_v2) on
+gpt-6-luna and compare them with the frozen prompts. All three scored lower on the 24 main
+cases (V1 0.46 -> 0.42, V2 0.58 -> 0.46, V3 0.83 -> 0.54), so switch trace.py's default agent
+prompt back to agent_v1, the one evaluated (--prompt agent_v2 still picks the new one). The
+dev index and the psf__requests-4718 copies had to be rebuilt first.
+
+### How I checked it
+[to fill by Gabriel Tan]
+
+### What I kept or changed
+[to fill by Gabriel Tan]
