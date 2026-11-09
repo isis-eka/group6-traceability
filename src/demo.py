@@ -13,7 +13,7 @@ Run:    python src/demo.py --list                                  # case ids to
         python src/demo.py psf__requests-1142__ac1__covered
         python src/demo.py psf__requests-1142__ac1__covered --no-pause   # no Enter prompts
 Needs:  the same as run_v1.py (workspaces, embedding index, OPENAI_API_KEY in .env), plus
-        data/labels_v1.jsonl for step 4.
+        data/labels_dev.jsonl (the dev answer key, shared privately) for step 4.
 """
 import argparse
 import json
@@ -24,7 +24,7 @@ from pathlib import Path
 from run_v1 import ask_model, build_prompt, choose_model, load_cases, load_search, make_client, parse_reply
 
 CASES = "data/cases.jsonl"
-LABELS = "data/labels_v1.jsonl"
+LABELS = "data/labels_dev.jsonl"
 PROMPT = "verdict_v1"
 K = 3
 CODE_LINES = 15
@@ -50,9 +50,8 @@ def short_name(test_id):
 
 
 def correct_answer(case):
-    """The answer key's row for this case. Labels are per issue and copy for now:
-    psf__requests-1142__ac1__covered -> psf__requests-1142-covered (as in evaluate.py)."""
-    key = f"{case['instance_id']}-{case['variant']}"
+    """The answer key's row for this case (one row per case, keyed by case_id, as in evaluate.py)."""
+    key = case["case_id"]
     with open(LABELS, encoding="utf-8") as f:
         for line in f:
             if line.strip():

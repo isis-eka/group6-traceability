@@ -386,3 +386,20 @@ checked that results showed up in the results/test folder for 2 runs V1 and V2
 
 ### What I kept or changed
 kept changes 
+
+## 2026-11-10 · Update the README for submission and fix demo.py's answer key
+- **Tool (model):** Claude Code (Claude Opus 5.5)
+- **Files:** README.md, src/demo.py
+- **Outcome:** Kept
+
+### What I asked for
+Update the README for the submission (setup and runnable examples): add a results summary, a
+runnable demo-shop example for trace.py, the current data files, answer keys, results folders,
+models, `prepare_repo.py --partial`, `make_cases.py` and the current score file names, and mark
+the post-test prompt experiments. Point src/demo.py at data/labels_dev.jsonl, looked up by case_id.
+
+### How I checked it
+[to fill by Isis Eka]
+
+### What I kept or changed
+[to fill by Isis Eka]
