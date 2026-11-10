@@ -136,33 +136,9 @@ Example: `python src/prepare_repo.py psf__requests-2317`
 
 **Models:** `gpt-6-luna` for all development and tuning (set `OPENAI_MODEL` in `.env` to change it), `gpt-6.1-sol` for the one final test-set run only, `text-embedding-3-small` for the test search, and `qwen3:8b` on Ollama as an offline fallback (testing only, not evaluated).
 
-## Demo: version 1 on one requirement
+## Dev set
 
-`src/demo.py` runs version 1 on one case and shows each step, waiting for Enter between them:
-
-1. the acceptance criterion
-2. the 3 tests the search finds, with their similarity score and code
-3. the AI's verdict, its reason and the tests it relied on (one real call, a fraction of a US cent)
-4. the right answer from the answer key, and whether the AI got it right
-
-It uses `run_v1.py`'s own search, prompt and model, so it gives the same answers as a real run. It saves nothing. The answer key is opened only in step 4, after the AI has answered.
-
-After the one-time setup:
-```bash
-source .venv/bin/activate
-python src/load_swebench.py                          # once: downloads the issues
-python src/prepare_repo.py psf__requests-5414          # the code copies for this issue
-python src/build_index.py --only psf__requests-5414    # its search index
-python src/demo.py psf__requests-5414__ac1__not_covered
-```
-- `python src/demo.py --list` shows every case id. Each criterion has a `covered` case (its tests are in the code) and a `not_covered` case (they were removed); four dev criteria also have a `partial` case.
-- `--no-pause` prints all 4 steps at once.
-- Step 4 needs `data/labels_dev.jsonl`, which is shared privately, not on GitHub. Without it, steps 1–3 still run and step 4 says so.
-- Good cases to try: `psf__requests-5414__ac1__not_covered` (a look-alike test exists, but the AI correctly says not covered) and the `psf__requests-1142__ac1__covered` / `__not_covered` pair (same requirement, with and without its test).
-
-## Version 1 dev set
-
-Version 1 runs on **10 dev issues**: 9 from `psf/requests` and 1 from `pallets/flask`, listed in `data/chosen_issues.json`. Each criterion is judged on a covered and a not_covered copy, and four also on a hand-built partial copy: 12 criteria, so 28 cases. We tune prompts on these, then freeze them. The reported results come from a separate test set of new issues (22 criteria, 48 cases).
+The dev (development) set is the practice round: the issues we used to build and tune the tool. It has **10 issues** (9 from `psf/requests`, 1 from `pallets/flask`), listed in `data/chosen_issues.json` as `"split": "dev"`. Each criterion is judged on a covered and a not_covered copy, and four also on a hand-built partial copy: 12 criteria, so 28 cases. We tried prompts and settings on these (for example embedding search vs BM25, 3 vs 5 tests), then froze the prompts on 31 Oct. Because we tuned on them, dev scores run high; the reported results come from the test set below.
 
 ## Test set
 
